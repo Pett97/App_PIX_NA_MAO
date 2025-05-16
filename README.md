@@ -39,6 +39,9 @@ _listagem de pix cadastrados
 _lista de clientes que estão com o status devedor
 
 ## 🗃️ Modelagem do Banco
+[Link Representação Banco visual ](https://app.brmodeloweb.com/#!/publicview/6826a2cda81ba6e1612056e4)
+
+
 Tabela: Cliente
 | ID |      Nome     | Contato | devedor |
 |--------------------|----------|----------|--|
@@ -49,8 +52,8 @@ Tabela: de pixs recebidos
 
 | ID |      Cliente     | Status | Valor | chave pix|data_agendamento|
 |---------------|----------|----------|-----|--|--|
-| 1  | id_client        | Pago  | 250    | id_chave|  |
-| 2  | id_client       | Agendado  | 175    |id_chave|2025-12-31|
+| 1  | id_cliente       | Pago  | 250    | id_chave|  |
+| 2  | id_cliente       | Agendado  | 175    |id_chave|2025-12-31|
 
 Tabela: Chaves PIXs
 
