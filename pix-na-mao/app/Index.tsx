@@ -1,10 +1,10 @@
 import React from "react";
-import FormClient from "../src/screen/clients/Form/FormClient";
-
+import Client from "../src/components/Client/Client";
+import ClientScreen from "../src/screen/client/ClientScreen";
 function index() {
   return (
     <>
-      <FormClient></FormClient>
+      <ClientScreen></ClientScreen>
     </>
   );
 }

@@ -1,7 +1,7 @@
 {
   "expo": {
-    "web":{
-       "bundler": "metro"
+    "web": {
+      "bundler": "metro"
     },
     "name": "pix-na-mao",
     "slug": "pix-na-mao",
@@ -30,7 +30,23 @@
       "favicon": "./app/assets/favicon.png"
     },
     "plugins": [
-      "expo-router"
+      "expo-router",
+      [
+        "expo-sqlite",
+        {
+          "enableFTS": true,
+          "useSQLCipher": true,
+          "android": {
+            "enableFTS": false,
+            "useSQLCipher": false
+          },
+          "ios": {
+            "customBuildFlags": [
+              "-DSQLITE_ENABLE_DBSTAT_VTAB=1 -DSQLITE_ENABLE_SNAPSHOT=1"
+            ]
+          }
+        }
+      ]
     ]
   }
 }
