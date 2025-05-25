@@ -1,9 +1,11 @@
 import React from "react";
-import { View, Text,KeyboardTypeOptions } from "react-native";
-import { Button, TextInput } from "react-native-paper";
+import { View, KeyboardTypeOptions } from "react-native";
+import { TextInput } from "react-native-paper";
+import InputStyle from "./InputStyle";
 
 interface MyInputProps {
   label: string;
+  mode?: "flat" | "outlined";
   placeholder: string;
   keyboardType?: KeyboardTypeOptions;
   value: string;
@@ -12,15 +14,17 @@ interface MyInputProps {
 
 function MyInput({
   label,
+  mode = "outlined",
   placeholder,
   keyboardType = "default",
   value,
   onChangeText,
 }: MyInputProps) {
   return (
-    <View >
+    <View style={InputStyle.inputField}>
       <TextInput
-       label={label}
+        label={label}
+        mode={mode}
         value={value}
         onChangeText={onChangeText}
         placeholder={placeholder}
