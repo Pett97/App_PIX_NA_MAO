@@ -1,34 +1,40 @@
 import React from "react";
 import { TouchableOpacity, View } from "react-native";
-import { List, Text } from "react-native-paper";
+import { IconButton, List, MD3Colors, Text } from "react-native-paper";
 import { ClientDatabase } from "../../database/useClientsDatabase";
 import Colors from "../../constants/Color";
 import { StyleSheet } from "react-native";
+import ClientStyle from "./ClientStyle";
 
 interface ClientProps {
   data: ClientDatabase;
-  action:()=>void
+  action: () => void;
+  secondAction: () => void;
 }
 
-function Client({ data,action }: ClientProps) {
+function Client({ data, action, secondAction }: ClientProps) {
   return (
-    <>
-     <TouchableOpacity onPress={action}>
-       <List.Item
-        style={{
-          borderRadius:50,
-          marginTop:12,
-          backgroundColor:
-            data.devedor === 0
-              ? Colors.light.primaryContainer
-              : Colors.light.errorContainer,
-        }}
-        title={data.nome}
-        description={data.contato}
-        left={(props) => <List.Icon {...props} icon="account"/>}
-      />
-     </TouchableOpacity>
-    </>
+    <View style={ClientStyle.container}>
+      <TouchableOpacity onPress={action}>
+        <List.Item
+          style={{
+            borderRadius: 50,
+            marginTop: 12,
+            backgroundColor:
+              data.devedor === 0
+                ? Colors.light.primaryContainer
+                : Colors.light.errorContainer,
+          }}
+          title={data.nome}
+          description={data.contato}
+          right={(props) => (
+            <TouchableOpacity onLongPress={secondAction}>
+              <List.Icon {...props} icon="delete" color="red" />
+            </TouchableOpacity>
+          )}
+        />
+      </TouchableOpacity>
+    </View>
   );
 }
 

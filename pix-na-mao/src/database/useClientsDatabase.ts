@@ -4,7 +4,7 @@ import { Alert } from "react-native";
 export interface ClientDatabase {
   id?: number;
   nome: string;
-  contato:string;
+  contato: string;
   devedor: number;  // 0 = false, 1 = true é pra funcionar teoricament 
 }
 
@@ -18,12 +18,12 @@ export function useClientsDatabase() {
     try {
       const result = await statement.executeAsync({
         $nome: data.nome,
-        $contato:data.contato,
+        $contato: data.contato,
         $devedor: data.devedor
       });
-      await statement.finalizeAsync();  
+      await statement.finalizeAsync();
 
-      const insertedRowId = result.lastInsertRowId.toLocaleString(); 
+      const insertedRowId = result.lastInsertRowId.toLocaleString();
       return { insertedRowId };
     } catch (error) {
       throw error;
@@ -35,24 +35,24 @@ export function useClientsDatabase() {
       const query = "SELECT * FROM clientes";
 
       const response = await database.getAllAsync<ClientDatabase>(query);
-      
+
       return response;
     } catch (error) {
       throw error;
     }
   }
 
-  async function searchByNome(nome:string) {
+  async function searchByNome(nome: string) {
     console.log(nome);
-      try {
-        const query = "SELECT * FROM clientes WHERE nome LIKE ?"
+    try {
+      const query = "SELECT * FROM clientes WHERE nome LIKE ?"
 
-        const response = await database.getAllAsync<ClientDatabase>(query,`%${nome}%`);
-        console.log(response);
-        return response;
-      } catch (error) {
-        throw error;
-      }
+      const response = await database.getAllAsync<ClientDatabase>(query, `%${nome}%`);
+      console.log(response);
+      return response;
+    } catch (error) {
+      throw error;
+    }
   }
 
   async function update(data: ClientDatabase) {
@@ -62,7 +62,7 @@ export function useClientsDatabase() {
     try {
       const result = await statement.executeAsync({
         $id: Number(data.id),
-        $contato:data.contato,
+        $contato: data.contato,
         $nome: data.nome,
         $devedor: data.devedor
       });
@@ -78,7 +78,7 @@ export function useClientsDatabase() {
     );
     try {
       const result = await statement.executeAsync({
-        $id: data.id
+        $id: Number(data.id)
       });
       await statement.finalizeAsync();
 
@@ -88,5 +88,5 @@ export function useClientsDatabase() {
     }
   }
 
-  return { create, update, remove,searchByNome,getAll };
+  return { create, update, remove, searchByNome, getAll };
 }

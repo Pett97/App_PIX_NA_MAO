@@ -90,6 +90,16 @@ function ClientScreen() {
     setIsSwitchOn(item.devedor === 1);
   }
 
+  async function destroy(item:ClientDatabase){
+    try {
+        await clienteDatabase.remove(item);
+        Alert.alert("Cliente Removido Com Sucesso");
+        list();
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   useEffect(() => {
     list();
   }, [findName]);
@@ -155,7 +165,11 @@ function ClientScreen() {
           data={clientes}
           keyExtractor={(item) => String(item.id)}
           renderItem={({ item }) => (
-            <Client data={item} action={() => details(item)}></Client>
+            <Client
+              data={item}
+              action={() => details(item)}
+              secondAction={() => destroy(item)}
+            ></Client>
           )}
         ></FlatList>
       </View>
