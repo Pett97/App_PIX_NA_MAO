@@ -1,5 +1,5 @@
 import React from "react";
-import { View } from "react-native";
+import { TouchableOpacity, View } from "react-native";
 import { List, Text } from "react-native-paper";
 import { ClientDatabase } from "../../database/useClientsDatabase";
 import Colors from "../../constants/Color";
@@ -7,12 +7,14 @@ import { StyleSheet } from "react-native";
 
 interface ClientProps {
   data: ClientDatabase;
+  action:()=>void
 }
 
-function Client({ data }: ClientProps) {
+function Client({ data,action }: ClientProps) {
   return (
     <>
-      <List.Item
+     <TouchableOpacity onPress={action}>
+       <List.Item
         style={{
           borderRadius:50,
           marginTop:12,
@@ -23,8 +25,9 @@ function Client({ data }: ClientProps) {
         }}
         title={data.nome}
         description={data.contato}
-        left={(props) => <List.Icon {...props} icon="account" />}
+        left={(props) => <List.Icon {...props} icon="account"/>}
       />
+     </TouchableOpacity>
     </>
   );
 }

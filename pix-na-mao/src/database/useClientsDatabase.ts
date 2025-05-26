@@ -47,7 +47,7 @@ export function useClientsDatabase() {
       try {
         const query = "SELECT * FROM clientes WHERE nome LIKE ?"
 
-        const response = await database.getAllAsync<ClientDatabase>(query,`%${nome}`);
+        const response = await database.getAllAsync<ClientDatabase>(query,`%${nome}%`);
         console.log(response);
         return response;
       } catch (error) {
@@ -57,17 +57,16 @@ export function useClientsDatabase() {
 
   async function update(data: ClientDatabase) {
     const statement = await database.prepareAsync(
-      "UPDATE clientes SET nome = $nome, devedor = $devedor WHERE id = $id"
+      "UPDATE clientes SET nome = $nome, devedor = $devedor,contato = $contato WHERE id = $id"
     );
     try {
       const result = await statement.executeAsync({
-        $id: data.id,
+        $id: Number(data.id),
+        $contato:data.contato,
         $nome: data.nome,
         $devedor: data.devedor
       });
       await statement.finalizeAsync();
-
-      return { changes: result.changes };
     } catch (error) {
       throw error;
     }

@@ -17,6 +17,7 @@ import Client from "../../components/Client/Client";
 function ClientScreen() {
   const clienteDatabase = useClientsDatabase();
   const [refreshing, setRefreshing] = React.useState(false);
+  const [id, setId] = React.useState<number | null>(null);
   const [clientes, setClientes] = React.useState<ClientDatabase[]>([]);
   const [findName, setFindName] = React.useState("");
   const [clientName, setClienteName] = React.useState("");
@@ -24,15 +25,50 @@ function ClientScreen() {
   const [isSwitchOn, setIsSwitchOn] = React.useState(false);
   const onToggleSwitch = () => setIsSwitchOn(isSwitchOn);
 
-  async function create(dataClient: ClientDatabase) {
+  async function create(data: ClientDatabase) {
     try {
-      const response = await clienteDatabase.create(dataClient);
+      const response = await clienteDatabase.create(data);
       Alert.alert(
         "Cliente Cadastrado com sucesso id: " + response.insertedRowId
       );
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async function update() {
+    try {
+      const response = await clienteDatabase.update({
+        id: Number(id),
+        nome: clientName,
+        contato: clientPhone,
+        devedor: isSwitchOn ? 1 : 0,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async function handleSave() {
+    try {
+      if (id) {
+        await update();
+        Alert.alert("Cliente atualizado com sucesso!");
+      } else {
+        const data: ClientDatabase = {
+          nome: clientName,
+          contato: clientPhone,
+          devedor: isSwitchOn ? 1 : 0,
+        };
+        await create(data);
+      }
+
+      setId(null);
       setClienteName("");
       setClientePhone("");
       setIsSwitchOn(false);
+
+      await list();
     } catch (error) {
       console.log(error);
     }
@@ -45,6 +81,13 @@ function ClientScreen() {
     } catch (error) {
       console.log(error);
     }
+  }
+
+  function details(item: ClientDatabase) {
+    if (item.id) setId(item.id);
+    setClienteName(item.nome);
+    setClientePhone(item.contato);
+    setIsSwitchOn(item.devedor === 1);
   }
 
   useEffect(() => {
@@ -96,7 +139,7 @@ function ClientScreen() {
               contato: clientPhone,
               devedor: isSwitchOn ? 1 : 0,
             };
-            create(client);
+            handleSave();
           }}
         />
       </View>
@@ -111,7 +154,9 @@ function ClientScreen() {
         <FlatList
           data={clientes}
           keyExtractor={(item) => String(item.id)}
-          renderItem={({ item }) => <Client data={item}></Client>}
+          renderItem={({ item }) => (
+            <Client data={item} action={() => details(item)}></Client>
+          )}
         ></FlatList>
       </View>
     </View>
