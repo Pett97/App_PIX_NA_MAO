@@ -1,12 +1,13 @@
-import React from 'react'
-import { Text, View } from 'react-native'
+import React from 'react';
+import { View } from 'react-native';
+import { Text } from 'react-native-paper';
 
-function teste() {
+function Teste() {
   return (
     <View>
-      <Text>apenas um teste</Text>
+      <Text>123123</Text>
     </View>
   )
 }
 
-export default teste
+export default Teste

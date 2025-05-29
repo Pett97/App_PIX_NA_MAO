@@ -1,12 +1,14 @@
-import React from "react";
-import { Text } from "react-native";
+import React from 'react';
+
+import ClientScreen from '../src/screen/client/ClientScreen';
 
 function index() {
   return (
     <>
-      <Text>Teste Router</Text>
+      <ClientScreen></ClientScreen>
     </>
   );
 }
 
 export default index;
+
