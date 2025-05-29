@@ -1,5 +1,5 @@
-import * as React from "react";
-import { Button } from "react-native-paper";
+import * as React from 'react';
+import { Button } from 'react-native-paper';
 
 interface MyButtonProps {
   title:string;

@@ -1,5 +1,4 @@
-import { useSQLiteContext } from "expo-sqlite";
-import { Alert } from "react-native";
+import { useSQLiteContext } from 'expo-sqlite';
 
 export interface ClientDatabase {
   id?: number;

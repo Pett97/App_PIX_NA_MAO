@@ -1,10 +1,10 @@
-import React from "react";
-import { TouchableOpacity, View } from "react-native";
-import { IconButton, List, MD3Colors, Text } from "react-native-paper";
-import { ClientDatabase } from "../../database/useClientsDatabase";
-import Colors from "../../constants/Color";
-import { StyleSheet } from "react-native";
-import ClientStyle from "./ClientStyle";
+import React from 'react';
+import { TouchableOpacity, View } from 'react-native';
+import { List } from 'react-native-paper';
+
+import Colors from '../../constants/Color';
+import { ClientDatabase } from '../../database/useClientsDatabase';
+import ClientStyle from './ClientStyle';
 
 interface ClientProps {
   data: ClientDatabase;

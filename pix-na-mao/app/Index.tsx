@@ -1,6 +1,7 @@
-import React from "react";
-import Client from "../src/components/Client/Client";
-import ClientScreen from "../src/screen/client/ClientScreen";
+import React from 'react';
+
+import ClientScreen from '../src/screen/client/ClientScreen';
+
 function index() {
   return (
     <>

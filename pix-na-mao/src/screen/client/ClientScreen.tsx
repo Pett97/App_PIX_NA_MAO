@@ -1,18 +1,14 @@
-import React, { useEffect } from "react";
-import {
-  ClientDatabase,
-  useClientsDatabase,
-} from "../../database/useClientsDatabase";
-import { Alert, View } from "react-native";
-import { Text } from "react-native-paper";
-import ClientScreenStyle from "./ClientScreenStyle";
-import MyInput from "../../components/MyInput/MyInput";
-import MySwitch from "../../components/Switch/MySwitch";
-import MyButton from "../../components/MyButton/MyButton";
-import MySearchBar from "../../components/MySearchBar/MySearchBar";
-import { FlatList } from "react-native";
+import React, { useEffect } from 'react';
+import { Alert, FlatList, View } from 'react-native';
+import { Text } from 'react-native-paper';
 
-import Client from "../../components/Client/Client";
+import Client from '../../components/Client/Client';
+import MyButton from '../../components/MyButton/MyButton';
+import MyInput from '../../components/MyInput/MyInput';
+import MySearchBar from '../../components/MySearchBar/MySearchBar';
+import MySwitch from '../../components/Switch/MySwitch';
+import { ClientDatabase, useClientsDatabase } from '../../database/useClientsDatabase';
+import ClientScreenStyle from './ClientScreenStyle';
 
 function ClientScreen() {
   const clienteDatabase = useClientsDatabase();
@@ -107,7 +103,7 @@ function ClientScreen() {
   return (
     <View style={{ flex: 1, margin: 15 }}>
       <View style={ClientScreenStyle.text}>
-        <Text variant="headlineSmall">Adicionar Novo Cliente</Text>
+        <Text variant="headlineSmall">Clientes</Text>
       </View>
 
       <View>
