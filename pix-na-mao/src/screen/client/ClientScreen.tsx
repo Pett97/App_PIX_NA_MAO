@@ -23,6 +23,10 @@ function ClientScreen() {
 
   async function create(data: ClientDatabase) {
     try {
+      if(!clientName ||!clientPhone){
+        Alert.alert("Verificar Dados");
+        return;
+      }
       const response = await clienteDatabase.create(data);
       Alert.alert(
         "Cliente Cadastrado com sucesso id: " + response.insertedRowId
@@ -34,6 +38,10 @@ function ClientScreen() {
 
   async function update() {
     try {
+         if(clientName == "" || clientPhone == ""){
+        Alert.alert("Verificar Dados");
+        return;
+      }
       const response = await clienteDatabase.update({
         id: Number(id),
         nome: clientName,
