@@ -1,14 +1,14 @@
-import React from 'react';
+import React from "react";
 
-import ClientScreen from '../src/screen/client/ClientScreen';
+import ClientScreen from "../src/screen/client/ClientScreen";
+import PixScreen from "../src/screen/pix/PixScreen";
 
 function index() {
   return (
     <>
-      <ClientScreen></ClientScreen>
+      <PixScreen></PixScreen>
     </>
   );
 }
 
 export default index;
-
