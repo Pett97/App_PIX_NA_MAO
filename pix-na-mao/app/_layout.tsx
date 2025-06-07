@@ -57,9 +57,9 @@ export default function _layout() {
         }}
       />
       <Tabs.Screen
-        name="teste"
+        name="chaves_pix/ChavesPix"
         options={{
-          title: "Teste",
+          title: "Chaves Pix",
           tabBarIcon: ({ color }) => (
             <MaterialIcons name="build" size={24} color={color} />
           ),
