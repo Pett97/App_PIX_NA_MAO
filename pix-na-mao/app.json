@@ -20,12 +20,13 @@
       "supportsTablet": true
     },
     "android": {
-      "versionCode":1,
+      "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./app/assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "package": "com.pett97.pixnamao"
     },
     "plugins": [
       "expo-router",
