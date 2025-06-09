@@ -103,7 +103,8 @@ function ClientScreen() {
       console.log(error);
     }
   }
-
+  
+  //para puxar os dados
   useEffect(() => {
     list();
   }, [findName]);

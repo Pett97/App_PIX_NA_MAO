@@ -21,6 +21,8 @@ export function useChavePixDatabse() {
             $nome_recebedor: data.nome_recebedor,
             $cidade_recebedor: data.cidade_recebedor ?? "GUARAPUAVA"
          });
+
+         console.log(result);
          await statement.finalizeAsync();
       } catch (error) {
          throw error;
@@ -32,16 +34,69 @@ export function useChavePixDatabse() {
          const QUERY = "SELECT * FROM chaves_pix";
 
          const response = await db.getAllAsync<ChavePixDatabase>(QUERY);
-         
+
          return response;
       } catch (error) {
          throw error;
       }
    };
 
-   async function update(data:ChavePixDatabase) {
-      const statement  = await db.prepareAsync("UPDATE chaves_pix SET chave_pix = $")      
+   async function update(data: ChavePixDatabase) {
+      if(!data.id) throw new Error("ID é necessario para atualizar");
+      
+      const statement = await db.prepareAsync("UPDATE chaves_pix SET chave_pix = $chave_pix,nome_recebedor = $nome_recebedor, cidade_recebedor = $cidade_recebedor WHERE id = $id");
+
+      try {
+         const result = await statement.executeAsync({
+            $id: Number(data.id),
+            $nome_recebedor: data.nome_recebedor,
+            $chave_pix: data.chave_pix,
+            $cidade_recebedor: data.cidade_recebedor ?? "GUARAPUAVA"
+         });
+         console.log("Linhas atualizadas:", result.changes);
+         await statement.finalizeAsync();
+      } catch (error) {
+         throw error;
+      }
+   };
+
+   async function remove(data: ChavePixDatabase) {
+      const statement = await db.prepareAsync("DELETE FROM chaves_pix WHERE id = $id");
+
+      try {
+         const result = await statement.executeAsync({
+            $id: Number(data.id)
+         });
+
+         await statement.finalizeAsync();
+      } catch (error) {
+         throw error;
+      }
+
+   };
+
+   async function searchByChavePix(chavePix: string) {
+      const query = "SELECT * FROM chaves_pix WHERE chave_pix LIKE ?";
+
+      try {
+         const response = await db.getAllAsync<ChavePixDatabase>(query, `%${chavePix}%`);
+
+         return response;
+      } catch (error) {
+         throw error;
+      }
    }
 
-   return { create,getAll }
+   async function getByID(id:number) {
+      const query = "SELECT * FROM chaves_pix WHERE id = ?";
+
+      try {
+         const response = await db.getFirstAsync<ChavePixDatabase>(query,id);
+         return response
+      } catch (error) {
+         throw error;
+      }
+   }
+
+   return { create, getAll, update, remove, searchByChavePix,getByID }
 }

@@ -1,14 +1,22 @@
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import { DarkTheme as NavigationDarkTheme, DefaultTheme as NavigationDefaultTheme } from '@react-navigation/native';
-import merge from 'deepmerge';
-import { Tabs } from 'expo-router';
-import { SQLiteProvider } from 'expo-sqlite';
-import React from 'react';
-import { useColorScheme } from 'react-native';
-import { adaptNavigationTheme, MD3DarkTheme, MD3LightTheme, PaperProvider } from 'react-native-paper';
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import {
+  DarkTheme as NavigationDarkTheme,
+  DefaultTheme as NavigationDefaultTheme,
+} from "@react-navigation/native";
+import merge from "deepmerge";
+import { Tabs } from "expo-router";
+import { SQLiteProvider } from "expo-sqlite";
+import React from "react";
+import { useColorScheme } from "react-native";
+import {
+  adaptNavigationTheme,
+  MD3DarkTheme,
+  MD3LightTheme,
+  PaperProvider,
+} from "react-native-paper";
 
-import Colors from '../src/constants/Color';
-import { initializeDatabse } from '../src/database/InitializeDatabase';
+import Colors from "../src/constants/Color";
+import { initializeDatabse } from "../src/database/InitializeDatabase";
 
 const { LightTheme, DarkTheme } = adaptNavigationTheme({
   reactNavigationLight: NavigationDefaultTheme,
@@ -45,27 +53,39 @@ export default function _layout() {
   return (
     <SQLiteProvider databaseName="appDatabase.db" onInit={initializeDatabse}>
       <PaperProvider theme={paperTheme}>
-    <Tabs>
-      <Tabs.Screen
-        name="Index"
-        options={{
-          headerShown:false,
-          title: "Clientes",
-          tabBarIcon: ({ color }) => (
-            <MaterialIcons name="people" size={24} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="chaves_pix/ChavesPix"
-        options={{
-          title: "Chaves Pix",
-          tabBarIcon: ({ color }) => (
-            <MaterialIcons name="build" size={24} color={color} />
-          ),
-        }}
-      />
-    </Tabs>
+        <Tabs>
+          <Tabs.Screen
+            name="Index"
+            options={{
+              headerShown: false,
+              title: "Clientes",
+              tabBarIcon: ({ color }) => (
+                <MaterialIcons name="people" size={24} color={color} />
+              ),
+            }}
+          />
+          <Tabs.Screen
+            name="chaves_pix/Index"
+            options={{
+              title: "Chaves Pix",
+              tabBarIcon: ({ color }) => (
+                <MaterialIcons name="build" size={24} color={color} />
+              ),
+            }}
+          />
+          <Tabs.Screen
+            name="chaves_pix/NewChave"
+            options={{
+              href: null, // não mostra TabBar
+            }}
+          />
+          <Tabs.Screen
+          name="chaves_pix/[id]"
+          options={{
+            href:null
+          }}
+          ></Tabs.Screen>
+        </Tabs>
       </PaperProvider>
     </SQLiteProvider>
   );

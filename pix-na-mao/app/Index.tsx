@@ -6,7 +6,7 @@ import PixScreen from "../src/screen/pix/PixScreen";
 function index() {
   return (
     <>
-      <PixScreen></PixScreen>
+      <ClientScreen></ClientScreen>
     </>
   );
 }
