@@ -68,6 +68,7 @@ export default function _layout() {
             name="chaves_pix/Index"
             options={{
               title: "Chaves Pix",
+              headerTitleAlign:"center",
               tabBarIcon: ({ color }) => (
                 <MaterialIcons name="build" size={24} color={color} />
               ),
@@ -76,12 +77,16 @@ export default function _layout() {
           <Tabs.Screen
             name="chaves_pix/NewChave"
             options={{
+              title:"Nova Chave",
+              headerTitleAlign:"center",
               href: null, // não mostra TabBar
             }}
           />
           <Tabs.Screen
           name="chaves_pix/[id]"
           options={{
+            title:"Editar Chave",
+            headerTitleAlign:"center",
             href:null
           }}
           ></Tabs.Screen>

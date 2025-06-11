@@ -1,10 +1,11 @@
-import { Link, useFocusEffect, useRouter } from 'expo-router';
+import { useFocusEffect, useRouter } from 'expo-router';
 import React, { useCallback, useEffect, useState } from 'react';
-import { FlatList, View } from 'react-native';
-import { Icon } from 'react-native-paper';
+import { Alert, FlatList, View } from 'react-native';
 
 import Chave from '../../components/Chave/Chave';
+import MyButton from '../../components/MyButton/MyButton';
 import { ChavePixDatabase, useChavePixDatabse } from '../../database/useChavesPixDatabase';
+import { handleDelete } from '../../handle/handleDelete';
 import StylePixScreen from './StylePixScrenn';
 
 export default function PixScreen() {
@@ -13,7 +14,7 @@ export default function PixScreen() {
   const [chaves, setChaves] = React.useState<ChavePixDatabase[]>([]);
 
   //para puxar os dados
- useFocusEffect(
+  useFocusEffect(
     useCallback(() => {
       list();
     }, [])
@@ -28,13 +29,30 @@ export default function PixScreen() {
     }
   }
 
+  async function remove(data: ChavePixDatabase) {
+    try {
+      await DB.remove(data);
+      list();
+    } catch (error) {
+      Alert.alert("Não foi possivel deletar chave pix");
+    }
+  }
+
+  function redirect() {
+    const router = useRouter();
+    router.push("chaves_pix/NewChave");
+  }
+
   return (
     <View style={StylePixScreen.container}>
-      <Link href={"chaves_pix/NewChave"}>
-        {" "}
-        <Icon source="plus-circle" size={20} />
-        Adicionar Nova Chave
-      </Link>
+      <View style={StylePixScreen.btnNewChave}>
+        <MyButton
+          title="Adicionar Nova Chave Pix"
+          icon="plus-circle"
+          mode="contained"
+          action={redirect}
+        ></MyButton>
+      </View>
       <View style={{ flex: 1, margin: 15 }}>
         <FlatList
           data={chaves}
@@ -44,8 +62,12 @@ export default function PixScreen() {
               nome_recebedor={item.nome_recebedor}
               cidade_recebedor={item.cidade_recebedor ?? "GURAPAUVA"}
               chave_pix={item.chave_pix}
-              action={() => {router.push(`chaves_pix/${item.id}`)}}
-              secondAction={()=>{console.log("123123123")}}
+              action={() => {
+                router.push(`chaves_pix/${item.id}`);
+              }}
+              secondAction={() => {
+                handleDelete("Cencelar", "Deletar", () => remove(item));
+              }}
             ></Chave>
           )}
         ></FlatList>

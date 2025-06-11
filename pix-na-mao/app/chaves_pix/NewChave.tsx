@@ -1,7 +1,7 @@
-import React from "react";
-import { View } from "react-native";
-import { Text } from "react-native-paper";
-import NewPixScreen from "../../src/screen/pix/NewPixScreen";
+import React from 'react';
+import { View } from 'react-native';
+
+import NewPixScreen from '../../src/screen/pix/new/NewPixScreen';
 
 function NewChave() {
   return (

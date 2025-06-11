@@ -1,8 +1,8 @@
 import React from "react";
-import EditChaveScreen from "../../src/screen/pix/EditChaveScreen";
+import EditPixScreen from "../../src/screen/pix/edit/EditChaveScreen";
 
 function EditChave() {
-  return <EditChaveScreen></EditChaveScreen>;
+  return <EditPixScreen></EditPixScreen>
 }
 
 export default EditChave;

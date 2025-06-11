@@ -1,13 +1,10 @@
-import React, { useEffect, useState } from "react";
-import { Alert, View } from "react-native";
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import React, { useEffect, useState } from 'react';
+import { Alert, View } from 'react-native';
 
-import MyButton from "../../components/MyButton/MyButton";
-import MyInput from "../../components/MyInput/MyInput";
-import {
-  ChavePixDatabase,
-  useChavePixDatabse,
-} from "../../database/useChavesPixDatabase";
+import MyButton from '../../../components/MyButton/MyButton';
+import MyInput from '../../../components/MyInput/MyInput';
+import { ChavePixDatabase, useChavePixDatabse } from '../../../database/useChavesPixDatabase';
 
 function EditPixScreen() {
   const DB = useChavePixDatabse();
