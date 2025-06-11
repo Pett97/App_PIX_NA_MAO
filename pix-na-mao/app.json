@@ -1,7 +1,7 @@
 {
   "expo": {
     "web": {
-      "bundler": "metro"
+      "favicon": "./app/assets/favicon.png"
     },
     "name": "pix-na-mao",
     "slug": "pix-na-mao",
@@ -20,14 +20,13 @@
       "supportsTablet": true
     },
     "android": {
+      "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./app/assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
-    },
-    "web": {
-      "favicon": "./app/assets/favicon.png"
+      "edgeToEdgeEnabled": true,
+      "package": "com.pett97.pixnamao"
     },
     "plugins": [
       "expo-router",
@@ -47,6 +46,12 @@
           }
         }
       ]
-    ]
+    ],
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "541205a2-9ebb-4156-b891-fdec15516f85"
+      }
+    }
   }
 }
