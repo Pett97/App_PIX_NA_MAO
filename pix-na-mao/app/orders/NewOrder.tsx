@@ -1,11 +1,11 @@
 import React from 'react'
 import { View } from 'react-native'
-import { Text } from 'react-native-paper'
+import NewOrderScreen from '../../src/screen/order/new-order/NewOrderScreen'
 
 function NewOrder() {
   return (
     <View>
-      
+      <NewOrderScreen></NewOrderScreen>
     </View>
   )
 }
