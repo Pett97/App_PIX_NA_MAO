@@ -22,7 +22,6 @@ export function useChavePixDatabse() {
             $cidade_recebedor: data.cidade_recebedor ?? "GUARAPUAVA"
          });
 
-         console.log(result);
          await statement.finalizeAsync();
       } catch (error) {
          throw error;
@@ -53,7 +52,7 @@ export function useChavePixDatabse() {
             $chave_pix: data.chave_pix,
             $cidade_recebedor: data.cidade_recebedor ?? "GUARAPUAVA"
          });
-         console.log("Linhas atualizadas:", result.changes);
+         
          await statement.finalizeAsync();
       } catch (error) {
          throw error;

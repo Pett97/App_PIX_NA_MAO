@@ -5,22 +5,21 @@ import MyButton from "../../../components/MyButton/MyButton";
 import Order from "../../../components/Order/Order";
 import { router, useRouter } from "expo-router";
 import {
-  ComprasDatabase,
+  ComprasDatabaseFormatada,
   useOrderDatabase,
 } from "../../../database/useOrderDatabase";
-import { Item } from "react-native-paper/lib/typescript/components/Drawer/Drawer";
+import testeStyle from "./OrderScreenStyle";
 
 function OrderScreen() {
   const DB = useOrderDatabase();
-  const [compras, setCompras] = React.useState<ComprasDatabase[]>([]);
+  const [compras, setCompras] = React.useState<ComprasDatabaseFormatada[]>([]);
 
   useEffect(() => {
     list();
   });
 
      async function list() {
-      const response = await DB.getAll();
-      
+      const response = await DB.getVendasFormatadas();
       setCompras(response);
     }
   function redirect() {
@@ -39,7 +38,7 @@ function OrderScreen() {
           }}
         ></MyButton>
       </View>
-      <View>
+      <View style={testeStyle.lista}>
         <FlatList
           data={compras}
           keyExtractor={(item) => String(item.id)}

@@ -6,9 +6,16 @@ export interface ComprasDatabase {
    idChavePix: number;
    idCliente: number;
    agendado: number;
-   dataAgendamento?: Date | string;
+   dataAgendamento?: Date;
    status?: number;
    descricao?: string;
+}
+
+
+export interface ComprasDatabaseFormatada extends ComprasDatabase {
+   nomeCliente: string;
+   contatoCliente: string;
+   devedorCliente: number;
 }
 
 export function useOrderDatabase() {
@@ -44,23 +51,10 @@ export function useOrderDatabase() {
       try {
          const query = "SELECT * FROM compras";
          const response = await database.getAllAsync<any>(query);
-         return response.map(formatCompra); //xaxo pesquisar 
+         return response;
       } catch (error) {
          throw error;
       }
-   }
-
-   function formatCompra(row: any): ComprasDatabase {
-      return {
-         id: row.id,
-         valor: row.valor,
-         idChavePix: row.id_chave_pix,
-         idCliente: row.id_cliente,
-         agendado: row.agendado,
-         dataAgendamento: row.data_agendamento ? new Date(row.data_agendamento).toLocaleDateString("pt-br") : undefined,
-         status: row.status,
-         descricao: row.descricao,
-      };
    }
 
    async function searchByNome(nome: string) {
@@ -148,6 +142,31 @@ export function useOrderDatabase() {
          throw error;
       }
    }
+   async function getVendasFormatadas(): Promise<ComprasDatabaseFormatada[]> {
+      try {
+         const query = `
+            SELECT 
+        compras.id,
+        compras.valor,
+        compras.id_chave_pix AS idChavePix,
+        compras.id_cliente AS idCliente,
+        compras.agendado,
+        compras.data_agendamento AS dataAgendamento,
+        compras.status,
+        compras.descricao,
+        clientes.nome AS nomeCliente,
+        clientes.contato AS contatoCliente,
+        clientes.devedor AS devedorCliente
+      FROM compras
+      JOIN clientes ON compras.id_cliente = clientes.id
+    `;
 
-   return { create, update, remove, searchByNome, getAll, getClienteByIdCompra };
+         const result = await database.getAllAsync<ComprasDatabaseFormatada>(query);
+         return result;
+      } catch (error) {
+         throw error;
+      }
+   }
+
+   return { create, update, remove, searchByNome, getClienteByIdCompra, getVendasFormatadas };
 }
