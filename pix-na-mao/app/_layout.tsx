@@ -68,27 +68,57 @@ export default function _layout() {
             name="chaves_pix/Index"
             options={{
               title: "Chaves Pix",
-              headerTitleAlign:"center",
+              headerTitleAlign: "center",
               tabBarIcon: ({ color }) => (
-                <MaterialIcons name="build" size={24} color={color} />
+                <MaterialIcons name="account-balance" size={24} color={color} />
               ),
             }}
           />
           <Tabs.Screen
             name="chaves_pix/NewChave"
             options={{
-              title:"Nova Chave",
-              headerTitleAlign:"center",
+              title: "Nova Chave",
+              headerTitleAlign: "center",
               href: null, // não mostra TabBar
             }}
           />
           <Tabs.Screen
-          name="chaves_pix/[id]"
-          options={{
-            title:"Editar Chave",
-            headerTitleAlign:"center",
-            href:null
-          }}
+            name="chaves_pix/[id]"
+            options={{
+              title: "Editar Chave Pix ",
+              headerTitleAlign: "center",
+              href: null, // não mostra TabBar
+            }}
+          />
+          <Tabs.Screen
+            name="orders/index"
+            options={{
+              title: "Vendas",
+              headerTitleAlign: "center",
+              tabBarIcon: ({ color }) => (
+                <MaterialIcons
+                  name="shopping-cart"
+                  size={24}
+                  color={color}
+                ></MaterialIcons>
+              ),
+            }}
+          />
+          <Tabs.Screen
+            name="orders/[id]"
+            options={{
+              title: "Editar Compra",
+              headerTitleAlign: "center",
+              href: null,
+            }}
+          ></Tabs.Screen>
+          <Tabs.Screen
+            name="orders/NewOrder"
+            options={{
+              title: "Cadastrar Nova Compra",
+              headerTitleAlign: "center",
+              href: null,
+            }}
           ></Tabs.Screen>
         </Tabs>
       </PaperProvider>

@@ -11,6 +11,7 @@ interface QRCODEProps {
   infoAdicional: string;
 }
 
+//na info adicional colocar o nome do pagadador
 function QrCode({ chavePix,nomeRecebedor,cidadeRecebedor,valor,infoAdicional}:QRCODEProps) {
    const pix =  gerarPayloadPix({chavePix,nomeRecebedor,cidadeRecebedor,valor,infoAdicional});
 

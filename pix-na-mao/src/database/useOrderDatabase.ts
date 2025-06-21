@@ -74,6 +74,17 @@ export function useOrderDatabase() {
       }
    }
 
+   async function getCompraById(idCompra: number) {
+      const query = `SELECT compra.* LIKE ?`;
+      try {
+         const response = await database.getFirstAsync<ComprasDatabaseFormatada>(query, idCompra);
+         return response;
+      } catch (error) {
+         throw error
+         return null;
+      }
+   }
+
    async function getClienteByIdCompra(idCompra: number) {
       try {
          const query = `
@@ -168,5 +179,5 @@ export function useOrderDatabase() {
       }
    }
 
-   return { create, update, remove, searchByNome, getClienteByIdCompra, getVendasFormatadas };
+   return { create, update, remove, searchByNome, getClienteByIdCompra, getVendasFormatadas, getCompraById };
 }
