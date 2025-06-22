@@ -1,19 +1,29 @@
-import { Picker } from '@react-native-picker/picker';
-import { useFocusEffect, useLocalSearchParams } from 'expo-router';
-import React, { useCallback, useEffect, useState } from 'react';
-import { Alert, View } from 'react-native';
-import { Text } from 'react-native-paper';
+import { Picker } from "@react-native-picker/picker";
+import { useFocusEffect, useLocalSearchParams } from "expo-router";
+import React, { useCallback, useEffect, useState } from "react";
+import { Alert, View } from "react-native";
+import { Text } from "react-native-paper";
 
-import Calender from '../../../components/Calender/Calender';
-import MyButton from '../../../components/MyButton/MyButton';
-import MyInput from '../../../components/MyInput/MyInput';
-import MyPicker from '../../../components/MyPicker/MyPicker';
-import { ChavePixDatabase, useChavePixDatabse } from '../../../database/useChavesPixDatabase';
-import { ClientDatabase, useClientsDatabase } from '../../../database/useClientsDatabase';
-import { ComprasDatabase, useOrderDatabase } from '../../../database/useOrderDatabase';
+import Calender from "../../../components/Calender/Calender";
+import MyButton from "../../../components/MyButton/MyButton";
+import MyInput from "../../../components/MyInput/MyInput";
+import MyPicker from "../../../components/MyPicker/MyPicker";
+import {
+  ChavePixDatabase,
+  useChavePixDatabse,
+} from "../../../database/useChavesPixDatabase";
+import {
+  ClientDatabase,
+  useClientsDatabase,
+} from "../../../database/useClientsDatabase";
+import {
+  ComprasDatabase,
+  ComprasDatabaseFormatada,
+  useOrderDatabase,
+} from "../../../database/useOrderDatabase";
 
 function DetailOrderScreen() {
-  const {id} = useLocalSearchParams();
+  const { id } = useLocalSearchParams();
   const databaseCompras = useOrderDatabase();
   const databaseClientes = useClientsDatabase();
   const databaseChavePix = useChavePixDatabse();
@@ -38,17 +48,35 @@ function DetailOrderScreen() {
   }
 
   async function buscarDadosCompra() {
-    const response = await databaseCompras.getCompraById(Number(id));
-    console.log(response);
+    try {
+      const compra:ComprasDatabaseFormatada|null = await DB.getCompraById(Number(id));
+      if (compra) {
+        console.log(compra);
+        setSelectedCliente(String(compra.idCliente));
+        setSelectedChavePix(String(compra.idChavePix));
+        setValorVenda(String(compra.valor));
+        setPixAgendado(Boolean(compra.agendado));
+        setDataAgendamentoPix(
+          compra.dataAgendamento
+            ? new Date(compra.dataAgendamento).toISOString().split("T")[0]
+            : ""
+        );
+      }
+    } catch (error) {
+      console.error("Erro ao buscar compra:", error);
+    }
   }
 
-  useFocusEffect(
-    useCallback(() => {
-      buscarDadosCompra();
-      buscarChavePix();
-      buscarClientes();
-    }, [])
-  );
+useFocusEffect(
+  useCallback(() => {
+    const carregarDados = async () => {
+      await buscarClientes();
+      await buscarChavePix();
+      await buscarDadosCompra();
+    };
+    carregarDados();
+  }, [])
+);
 
   const listaDeClientes = clientes.map((cliente) => ({
     label: cliente.nome,
@@ -60,8 +88,8 @@ function DetailOrderScreen() {
     value: String(chavePix.id),
   }));
 
-  async function salvarVenda() {
-    const dataVenda: ComprasDatabase = {
+  async function atualizarOrder() {
+    const dataVenda: ComprasDatabaseFormatada = {
       valor: Number(valorVenda),
       idChavePix: Number(selectedChavePix),
       idCliente: Number(selectedCliente),
@@ -70,17 +98,16 @@ function DetailOrderScreen() {
       status: 1,
     };
     try {
-      const response = await DB.create(dataVenda);
+      const response = await DB.update(dataVenda);
     } catch (error) {
-      Alert.alert("Não Foi possivel Salvar Venda ");
+      Alert.alert("Não Foi possivel Atualizar Venda ");
     }
   }
 
   return (
     <View>
-      <Text>Cadastrar Nova Venda</Text>
       <View>
-        <Text>Selecionar Cliente</Text>
+        <Text>Atualizar Cliente</Text>
         <MyPicker
           label="Selecione um cliente"
           value={selectedCliente}
@@ -89,7 +116,7 @@ function DetailOrderScreen() {
         />
       </View>
       <View>
-        <Text>Selecionar Chave Pix</Text>
+        <Text>Atualizar Chave Pix</Text>
         <MyPicker
           label="Selecione a chave pix "
           value={selectedChavePix}
@@ -117,14 +144,17 @@ function DetailOrderScreen() {
         </Picker>
       </View>
       <View>
-        <Calender onChangeData={setDataAgendamentoPix} dataAgendamento={dataAgendamentoPix}></Calender>
+        <Calender
+          onChangeData={setDataAgendamentoPix}
+          dataAgendamento={dataAgendamentoPix}
+        ></Calender>
       </View>
       <View>
         <MyButton
-          title="Salvar Venda"
+          title="Atualizar Venda"
           icon="send"
           action={() => {
-            salvarVenda();
+            atualizarOrder();
           }}
         ></MyButton>
       </View>

@@ -74,41 +74,29 @@ export function useOrderDatabase() {
       }
    }
 
-   async function getCompraById(idCompra: number) {
-      const query = `SELECT compra.* LIKE ?`;
+   async function getCompraById(idCompra: number): Promise<ComprasDatabaseFormatada | null> {
+      const query = `SELECT 
+               compras.id,
+               compras.valor,
+               compras.id_chave_pix AS idChavePix,
+               compras.id_cliente AS idCliente,
+               compras.agendado,
+               compras.data_agendamento AS dataAgendamento,
+               compras.status,
+               compras.descricao,
+               clientes.nome AS nomeCliente,
+               clientes.contato AS contatoCliente,
+               clientes.devedor AS devedorCliente
+               FROM compras
+               JOIN clientes ON compras.id_cliente = clientes.id`;
       try {
-         const response = await database.getFirstAsync<ComprasDatabaseFormatada>(query, idCompra);
+         const response = await database.getFirstAsync<ComprasDatabaseFormatada>(query, [idCompra]);
          return response;
       } catch (error) {
-         throw error
+         console.error("Erro ao buscar compra por ID:", error);
          return null;
       }
    }
-
-   async function getClienteByIdCompra(idCompra: number) {
-      try {
-         const query = `
-      SELECT compras.*, clientes.nome, clientes.contato, clientes.devedor
-      FROM compras
-      JOIN clientes ON compras.id_cliente = clientes.id
-      WHERE compras.id = $idCompra
-    `;
-
-         const result = await database.getAllAsync<
-            ComprasDatabase & {
-               nome: string;
-               contato: string;
-               devedor: number;
-            }
-         >(query, { $idCompra: idCompra });
-
-         return result[0];
-      } catch (error) {
-         console.error("Erro ao buscar compra com cliente:", error);
-         throw error;
-      }
-   }
-
    async function update(data: ComprasDatabase) {
       const statement = await database.prepareAsync(
          `UPDATE compras SET
@@ -179,5 +167,5 @@ export function useOrderDatabase() {
       }
    }
 
-   return { create, update, remove, searchByNome, getClienteByIdCompra, getVendasFormatadas, getCompraById };
+   return { create, update, remove, searchByNome, getVendasFormatadas, getCompraById };
 }
