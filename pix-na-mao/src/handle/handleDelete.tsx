@@ -1,10 +1,9 @@
 import { Alert } from "react-native";
 
-
 export function handleDelete(
   cancel: string,
   confirm: string,
-  onConfirm: () => Promise<void>
+  onConfirm: () => Promise<void>,
 ) {
   Alert.alert("Confirmar Exclusão", "Tem certeza que deseja excluir?", [
     { text: cancel, style: "cancel" },

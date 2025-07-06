@@ -1,10 +1,8 @@
-import React from 'react'
-import ShowQrCodeScreen from '../src/screen/QrCodeScreen'
+import React from "react";
+import ShowQrCodeScreen from "../src/screen/QrCodeScreen";
 
 function ShowQrCode() {
-  return (
-    <ShowQrCodeScreen></ShowQrCodeScreen>
-  )
+  return <ShowQrCodeScreen></ShowQrCodeScreen>;
 }
 
-export default ShowQrCode
+export default ShowQrCode;

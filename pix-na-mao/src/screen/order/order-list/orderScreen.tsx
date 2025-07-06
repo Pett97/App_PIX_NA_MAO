@@ -1,49 +1,60 @@
-import React, { useCallback, useEffect } from "react";
+import { useFocusEffect, useRouter } from "expo-router";
+import React, { useCallback, useState } from "react";
 import { Alert, FlatList, View } from "react-native";
 
 import MyButton from "../../../components/MyButton/MyButton";
 import Order from "../../../components/Order/Order";
-import { router, useFocusEffect, useRouter } from "expo-router";
 import {
   ComprasDatabaseFormatada,
   useOrderDatabase,
 } from "../../../database/useOrderDatabase";
-import testeStyle from "./OrderScreenStyle";
 import { handleDelete } from "../../../handle/handleDelete";
+import testeStyle from "./OrderScreenStyle";
 
 function OrderScreen() {
   const DB = useOrderDatabase();
   const router = useRouter();
-  const [compras, setCompras] = React.useState<ComprasDatabaseFormatada[]>([]);
+  const [compras, setCompras] = useState<ComprasDatabaseFormatada[]>([]);
+
+  const list = useCallback(async () => {
+    try {
+      const response = await DB.getVendasFormatadas();
+      console.log(response);
+      setCompras(response);
+    } catch (error) {
+      console.error("Erro ao listar vendas:", error);
+    }
+  }, [DB]);
+
+  const redirect = useCallback(() => {
+    router.push("orders/NewOrder");
+  }, [router]);
+
+  const detailOrderRedirect = useCallback(
+    (order: ComprasDatabaseFormatada) => {
+      router.push(`orders/${order.id}`);
+    },
+    [router],
+  );
+
+  const destroyOrder = useCallback(
+    async (order: ComprasDatabaseFormatada) => {
+      try {
+        await DB.remove(order);
+        list();
+      } catch (error) {
+        console.error(error);
+        Alert.alert("Não foi possível deletar Compra");
+      }
+    },
+    [DB, list],
+  );
 
   useFocusEffect(
     useCallback(() => {
       list();
-    }, [])
+    }, [list]),
   );
-
-  async function list() {
-    const response = await DB.getVendasFormatadas();
-    console.log(response);
-    setCompras(response);
-  }
-
-  function redirect() {
-    router.push("orders/NewOrder");
-  }
-
-  function detailOrderRedirect(order: ComprasDatabaseFormatada): void {
-    router.push(`orders/${order.id}`);
-  }
-
-  async function destroyOrder(order: ComprasDatabaseFormatada) {
-    try {
-      await DB.remove(order);
-      list();
-    } catch (error) {
-      Alert.alert("Não foi possivel deletar Compra");
-    }
-  }
 
   return (
     <View>
@@ -51,10 +62,8 @@ function OrderScreen() {
         <MyButton
           title="Adicionar Venda"
           icon="plus-circle"
-          action={() => {
-            redirect();
-          }}
-        ></MyButton>
+          action={redirect}
+        />
       </View>
       <View style={testeStyle.lista}>
         <FlatList
@@ -67,9 +76,9 @@ function OrderScreen() {
               secondAction={() => {
                 handleDelete("Cancelar", "Deletar", () => destroyOrder(item));
               }}
-            ></Order>
+            />
           )}
-        ></FlatList>
+        />
       </View>
     </View>
   );

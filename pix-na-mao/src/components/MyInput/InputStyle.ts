@@ -1,9 +1,9 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet } from "react-native";
 
 const InputStyle = StyleSheet.create({
-   inputField: {
-      margin: 15
-   }
+  inputField: {
+    margin: 15,
+  },
 });
 
 export default InputStyle;

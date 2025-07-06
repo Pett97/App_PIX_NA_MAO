@@ -1,12 +1,10 @@
-import { Picker } from "@react-native-picker/picker";
 import { useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { Alert, View } from "react-native";
 import { Text } from "react-native-paper";
-import { router } from "expo-router";
-
 import Calender from "../../../components/Calender/Calender";
 import MyButton from "../../../components/MyButton/MyButton";
+import { Picker } from "@react-native-picker/picker";
 import MyInput from "../../../components/MyInput/MyInput";
 import MyPicker from "../../../components/MyPicker/MyPicker";
 import {
@@ -26,7 +24,6 @@ import {
 function DetailOrderScreen() {
   const router = useRouter();
   const { id } = useLocalSearchParams();
-  const databaseCompras = useOrderDatabase();
   const databaseClientes = useClientsDatabase();
   const databaseChavePix = useChavePixDatabse();
   const DB = useOrderDatabase();
@@ -36,40 +33,49 @@ function DetailOrderScreen() {
   const [selectedCliente, setSelectedCliente] = useState<string>("");
   const [selectedChavePix, setSelectedChavePix] = useState<string>("");
   const [pixAgendado, setPixAgendado] = useState<boolean>(false);
-  const [statusPagamento, setStatusPagamento] = useState<Number>(0);
+  const [statusPagamento, setStatusPagamento] = useState<number>(0);
   const [valorVenda, setValorVenda] = useState<string>("");
   const [dataAgendamentoPix, setDataAgendamentoPix] = useState<string>("");
 
-  async function buscarClientes() {
-    const response = await databaseClientes.getAll();
-    setClientes(response);
-  }
+  const buscarClientes = useCallback(async () => {
+    try {
+      const response = await databaseClientes.getAll();
+      setClientes(response);
+    } catch (error) {
+      console.error("Erro ao buscar clientes:", error);
+    }
+  }, [databaseClientes]);
 
-  async function buscarChavePix() {
-    const response = await databaseChavePix.getAll();
-    setChavesPix(response);
-  }
+  const buscarChavePix = useCallback(async () => {
+    try {
+      const response = await databaseChavePix.getAll();
+      setChavesPix(response);
+    } catch (error) {
+      console.error("Erro ao buscar chaves pix:", error);
+    }
+  }, [databaseChavePix]);
 
-  async function buscarDadosCompra() {
+  const buscarDadosCompra = useCallback(async () => {
     try {
       const compra: ComprasDatabaseFormatada | null = await DB.getCompraById(
-        Number(id)
+        Number(id),
       );
       if (compra) {
         setSelectedCliente(String(compra.idCliente));
         setSelectedChavePix(String(compra.idChavePix));
         setValorVenda(String(compra.valor));
         setPixAgendado(Boolean(compra.agendado));
+        setStatusPagamento(compra.status);
         setDataAgendamentoPix(
           compra.dataAgendamento
             ? new Date(compra.dataAgendamento).toISOString().split("T")[0]
-            : ""
+            : "",
         );
       }
     } catch (error) {
       console.error("Erro ao buscar compra:", error);
     }
-  }
+  }, [DB, id]);
 
   useFocusEffect(
     useCallback(() => {
@@ -79,7 +85,7 @@ function DetailOrderScreen() {
         await buscarDadosCompra();
       };
       carregarDados();
-    }, [id])
+    }, [buscarClientes, buscarChavePix, buscarDadosCompra]),
   );
 
   const listaDeClientes = clientes.map((cliente) => ({
@@ -100,7 +106,7 @@ function DetailOrderScreen() {
       idCliente: Number(selectedCliente),
       agendado: pixAgendado ? 1 : 0,
       dataAgendamento: dataAgendamentoPix || null,
-      status: 1,
+      status: statusPagamento,
     };
 
     try {
@@ -140,10 +146,10 @@ function DetailOrderScreen() {
           keyboardType="numeric"
           value={valorVenda}
           onChangeText={setValorVenda}
-        ></MyInput>
+        />
       </View>
       <View>
-        <Text>esse pix é agendado? </Text>
+        <Text>Esse pix é agendado?</Text>
         <Picker
           selectedValue={pixAgendado ? "true" : "false"}
           onValueChange={(itemValue) => setPixAgendado(itemValue === "true")}
@@ -156,14 +162,16 @@ function DetailOrderScreen() {
         <Calender
           onChangeData={setDataAgendamentoPix}
           dataAgendamento={dataAgendamentoPix}
-        ></Calender>
+        />
       </View>
       <View>
-        <Text>Selcionar o Status Desse Pagamento</Text>
-        <Picker selectedValue={statusPagamento ? "true" : "false"}>
+        <Text>Selecionar o Status desse Pagamento</Text>
+        <Picker
+          selectedValue={statusPagamento.toString()}
+          onValueChange={(itemValue) => setStatusPagamento(Number(itemValue))}
+        >
           <Picker.Item label="ABERTO" value="0" />
           <Picker.Item label="PAGO" value="1" />
-          <Picker.Item label="ATRASADO" value="2" />
         </Picker>
       </View>
       <View>
@@ -182,16 +190,10 @@ function DetailOrderScreen() {
               },
             });
           }}
-        ></MyButton>
+        />
       </View>
       <View>
-        <MyButton
-          title="Atualizar Venda"
-          icon="send"
-          action={() => {
-            atualizarOrder();
-          }}
-        ></MyButton>
+        <MyButton title="Atualizar Venda" icon="send" action={atualizarOrder} />
       </View>
     </View>
   );

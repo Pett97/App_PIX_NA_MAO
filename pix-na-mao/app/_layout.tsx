@@ -1,10 +1,9 @@
-import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import {
   DarkTheme as NavigationDarkTheme,
   DefaultTheme as NavigationDefaultTheme,
 } from "@react-navigation/native";
 import merge from "deepmerge";
-import { Stack, Tabs } from "expo-router";
+import { Stack } from "expo-router";
 import { SQLiteProvider } from "expo-sqlite";
 import React from "react";
 import { useColorScheme } from "react-native";
@@ -42,7 +41,7 @@ const CustomLightTheme = {
 const CombinedDefaultTheme = merge(LightTheme, CustomLightTheme);
 const CombinedDarkTheme = merge(DarkTheme, CustomDarkTheme);
 
-export default function _layout() {
+export default function Layout() {
   const colorScheme = useColorScheme();
   const paperTheme =
     colorScheme === "dark" ? CombinedDarkTheme : CombinedDefaultTheme;
@@ -57,7 +56,6 @@ export default function _layout() {
             options={{
               title: "Visualizar QRCODE",
               headerTitleAlign: "center",
-              
             }}
           />
         </Stack>

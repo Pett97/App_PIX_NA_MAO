@@ -1,8 +1,8 @@
-import * as React from 'react';
-import { View } from 'react-native';
-import { Switch, Text } from 'react-native-paper';
+import * as React from "react";
+import { View } from "react-native";
+import { Switch, Text } from "react-native-paper";
 
-import StyleSwitch from './SwitchStyle';
+import StyleSwitch from "./SwitchStyle";
 
 interface MySwitchProps {
   firstText: string;

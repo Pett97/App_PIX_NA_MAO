@@ -23,7 +23,7 @@ const StylePix = StyleSheet.create({
     fontSize: 14,
     color: "#555",
     marginBottom: 4,
-  }
+  },
 });
 
 export default StylePix;
