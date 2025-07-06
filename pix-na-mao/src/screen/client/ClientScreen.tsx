@@ -35,6 +35,7 @@ function ClientScreen() {
   }, [clienteDatabase, findName]);
 
   async function create(data: ClientDatabase) {
+    if (!validate(data)) return;
     try {
       if (!clientName || !clientPhone) {
         Alert.alert("Verificar Dados");
@@ -50,17 +51,17 @@ function ClientScreen() {
   }
 
   async function update() {
+    const data: ClientDatabase = {
+      id: Number(id),
+      nome: clientName,
+      contato: clientPhone,
+      devedor: isSwitchOn ? 1 : 0,
+    };
+
+    if (!validate(data)) return;
+
     try {
-      if (clientName === "" || clientPhone === "") {
-        Alert.alert("Verificar Dados");
-        return;
-      }
-      await clienteDatabase.update({
-        id: Number(id),
-        nome: clientName,
-        contato: clientPhone,
-        devedor: isSwitchOn ? 1 : 0,
-      });
+      await clienteDatabase.update(data);
       Alert.alert("Cliente atualizado com sucesso!");
     } catch (error) {
       console.log(error);
@@ -97,6 +98,14 @@ function ClientScreen() {
     setClienteName(item.nome);
     setClientePhone(item.contato);
     setIsSwitchOn(item.devedor === 1);
+  }
+
+  function validate(item: ClientDatabase): boolean {
+    if (!item.nome || item.nome.trim().length < 3) {
+      Alert.alert("O nome do cliente deve ter pelo menos 3 caracteres.");
+      return false;
+    }
+    return true;
   }
 
   async function destroy(item: ClientDatabase) {
