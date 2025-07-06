@@ -49,7 +49,7 @@ function NewOrderScreen() {
 
       buscarChavePix();
       buscarClientes();
-    }, [databaseClientes, databaseChavePix])
+    }, [databaseClientes, databaseChavePix]),
   );
 
   const listaDeClientes = clientes.map((cliente) => ({
@@ -69,12 +69,12 @@ function NewOrderScreen() {
       idCliente: Number(selectedCliente),
       agendado: Number(pixAgendado),
       dataAgendamento: dataAgendamentoPix,
-      descricao:descricaoCompra,
+      descricao: descricaoCompra,
       status: 1,
     };
     try {
       await DB.create(dataVenda);
-      Alert.alert('Venda Cadastrada Com Sucesso');
+      Alert.alert("Venda Cadastrada Com Sucesso");
       router.push("orders");
     } catch (error) {
       console.error(error);

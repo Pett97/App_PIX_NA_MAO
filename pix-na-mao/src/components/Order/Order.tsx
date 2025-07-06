@@ -15,10 +15,17 @@ interface OrderProps {
 function Order({ data, action, secondAction }: OrderProps) {
   return (
     <TouchableOpacity onPress={action} onLongPress={secondAction}>
-      <View style={[OrderStyle.card,{
-        backgroundColor:
-        data.status === 1? Colors.light.primaryContainer: Colors.light.errorContainer
-      }]}>
+      <View
+        style={[
+          OrderStyle.card,
+          {
+            backgroundColor:
+              data.status === 1
+                ? Colors.light.primaryContainer
+                : Colors.light.errorContainer,
+          },
+        ]}
+      >
         <View style={OrderStyle.client}>
           <Text>
             ID:{data.id} Cliente: {data.idCliente} - {data.nomeCliente}
