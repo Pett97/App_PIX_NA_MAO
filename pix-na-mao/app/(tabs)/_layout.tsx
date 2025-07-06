@@ -1,0 +1,127 @@
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import {
+  DarkTheme as NavigationDarkTheme,
+  DefaultTheme as NavigationDefaultTheme,
+} from "@react-navigation/native";
+import merge from "deepmerge";
+import { Tabs } from "expo-router";
+import { SQLiteProvider } from "expo-sqlite";
+import React from "react";
+import { useColorScheme } from "react-native";
+import {
+  adaptNavigationTheme,
+  MD3DarkTheme,
+  MD3LightTheme,
+  PaperProvider,
+} from "react-native-paper";
+
+import Colors from "../../src/constants/Color";
+import { initializeDatabse } from "../../src/database/InitializeDatabase";
+
+const { LightTheme, DarkTheme } = adaptNavigationTheme({
+  reactNavigationLight: NavigationDefaultTheme,
+  reactNavigationDark: NavigationDarkTheme,
+});
+
+//Temas Personalizandos
+const CustomDarkTheme = {
+  ...MD3DarkTheme,
+  colors: {
+    ...MD3DarkTheme.colors,
+    ...Colors.dark,
+  },
+};
+
+const CustomLightTheme = {
+  ...MD3LightTheme,
+  colors: {
+    ...MD3LightTheme.colors,
+    ...Colors.light,
+  },
+};
+
+//Teste tomara que funfe
+const CombinedDefaultTheme = merge(LightTheme, CustomLightTheme);
+const CombinedDarkTheme = merge(DarkTheme, CustomDarkTheme);
+
+export default function _layout() {
+  const colorScheme = useColorScheme();
+
+  const paperTheme =
+    colorScheme === "dark" ? CombinedDarkTheme : CombinedDefaultTheme;
+
+  return (
+    <SQLiteProvider databaseName="appDatabase.db" onInit={initializeDatabse}>
+      <PaperProvider theme={paperTheme}>
+        <Tabs>
+          <Tabs.Screen
+            name="Index"
+            options={{
+              headerShown: false,
+              title: "Clientes",
+              tabBarIcon: ({ color }) => (
+                <MaterialIcons name="people" size={24} color={color} />
+              ),
+            }}
+          />
+          <Tabs.Screen
+            name="chaves_pix/Index"
+            options={{
+              title: "Chaves Pix",
+              headerTitleAlign: "center",
+              tabBarIcon: ({ color }) => (
+                <MaterialIcons name="account-balance" size={24} color={color} />
+              ),
+            }}
+          />
+          <Tabs.Screen
+            name="chaves_pix/NewChave"
+            options={{
+              title: "Nova Chave",
+              headerTitleAlign: "center",
+              href: null, // não mostra TabBar
+            }}
+          />
+          <Tabs.Screen
+            name="chaves_pix/[id]"
+            options={{
+              title: "Editar Chave Pix ",
+              headerTitleAlign: "center",
+              href: null, // não mostra TabBar
+            }}
+          />
+          <Tabs.Screen
+            name="orders/index"
+            options={{
+              title: "Vendas",
+              headerTitleAlign: "center",
+              tabBarIcon: ({ color }) => (
+                <MaterialIcons
+                  name="shopping-cart"
+                  size={24}
+                  color={color}
+                ></MaterialIcons>
+              ),
+            }}
+          />
+          <Tabs.Screen
+            name="orders/[id]"
+            options={{
+              title: "Editar Compra",
+              headerTitleAlign: "center",
+              href: null,
+            }}
+          ></Tabs.Screen>
+          <Tabs.Screen
+            name="orders/NewOrder"
+            options={{
+              title: "Cadastrar Nova Compra",
+              headerTitleAlign: "center",
+              href: null,
+            }}
+          ></Tabs.Screen>
+        </Tabs>
+      </PaperProvider>
+    </SQLiteProvider>
+  );
+}

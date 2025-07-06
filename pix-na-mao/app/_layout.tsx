@@ -4,7 +4,7 @@ import {
   DefaultTheme as NavigationDefaultTheme,
 } from "@react-navigation/native";
 import merge from "deepmerge";
-import { Tabs } from "expo-router";
+import { Stack, Tabs } from "expo-router";
 import { SQLiteProvider } from "expo-sqlite";
 import React from "react";
 import { useColorScheme } from "react-native";
@@ -23,7 +23,6 @@ const { LightTheme, DarkTheme } = adaptNavigationTheme({
   reactNavigationDark: NavigationDarkTheme,
 });
 
-//Temas Personalizandos
 const CustomDarkTheme = {
   ...MD3DarkTheme,
   colors: {
@@ -40,57 +39,28 @@ const CustomLightTheme = {
   },
 };
 
-//Teste tomara que funfe
 const CombinedDefaultTheme = merge(LightTheme, CustomLightTheme);
 const CombinedDarkTheme = merge(DarkTheme, CustomDarkTheme);
 
 export default function _layout() {
   const colorScheme = useColorScheme();
-
   const paperTheme =
     colorScheme === "dark" ? CombinedDarkTheme : CombinedDefaultTheme;
 
   return (
     <SQLiteProvider databaseName="appDatabase.db" onInit={initializeDatabse}>
       <PaperProvider theme={paperTheme}>
-        <Tabs>
-          <Tabs.Screen
-            name="Index"
+        <Stack>
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen
+            name="orders/ShowQrCode"
             options={{
-              headerShown: false,
-              title: "Clientes",
-              tabBarIcon: ({ color }) => (
-                <MaterialIcons name="people" size={24} color={color} />
-              ),
+              title: "Visualizar QRCODE",
+              headerTitleAlign: "center",
+              
             }}
           />
-          <Tabs.Screen
-            name="chaves_pix/Index"
-            options={{
-              title: "Chaves Pix",
-              headerTitleAlign:"center",
-              tabBarIcon: ({ color }) => (
-                <MaterialIcons name="build" size={24} color={color} />
-              ),
-            }}
-          />
-          <Tabs.Screen
-            name="chaves_pix/NewChave"
-            options={{
-              title:"Nova Chave",
-              headerTitleAlign:"center",
-              href: null, // não mostra TabBar
-            }}
-          />
-          <Tabs.Screen
-          name="chaves_pix/[id]"
-          options={{
-            title:"Editar Chave",
-            headerTitleAlign:"center",
-            href:null
-          }}
-          ></Tabs.Screen>
-        </Tabs>
+        </Stack>
       </PaperProvider>
     </SQLiteProvider>
   );

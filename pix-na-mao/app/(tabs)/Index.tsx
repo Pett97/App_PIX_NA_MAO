@@ -1,7 +1,6 @@
 import React from "react";
 
-import ClientScreen from "../src/screen/client/ClientScreen";
-import PixScreen from "../src/screen/pix/PixScreen";
+import ClientScreen from "../../src/screen/client/ClientScreen";
 
 function index() {
   return (

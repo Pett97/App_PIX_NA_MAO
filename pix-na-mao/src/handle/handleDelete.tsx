@@ -1,5 +1,5 @@
 import { Alert } from "react-native";
-import { async } from "../database/InitializeDatabase";
+
 
 export function handleDelete(
   cancel: string,
