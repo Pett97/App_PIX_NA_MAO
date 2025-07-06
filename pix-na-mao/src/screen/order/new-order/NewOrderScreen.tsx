@@ -1,5 +1,5 @@
 import { Picker } from "@react-native-picker/picker";
-import { useFocusEffect } from "expo-router";
+import { router, useFocusEffect } from "expo-router";
 import React, { useCallback, useState } from "react";
 import { Alert, View } from "react-native";
 import { Text } from "react-native-paper";
@@ -33,16 +33,7 @@ function NewOrderScreen() {
   const [pixAgendado, setPixAgendado] = useState<boolean>(false);
   const [valorVenda, setValorVenda] = useState("");
   const [dataAgendamentoPix, setDataAgendamentoPix] = useState<string>("");
-
-  // async function buscarClientes() {
-  //   const response = await databaseClientes.getAll();
-  //   setClientes(response);
-  // }
-
-  // async function buscarChavePix() {
-  //   const response = await databaseChavePix.getAll();
-  //   setChavesPix(response);
-  // }
+  const [descricaoCompra, setDescricaoCompra] = useState<string>("");
 
   useFocusEffect(
     useCallback(() => {
@@ -78,10 +69,13 @@ function NewOrderScreen() {
       idCliente: Number(selectedCliente),
       agendado: Number(pixAgendado),
       dataAgendamento: dataAgendamentoPix,
+      descricao: descricaoCompra,
       status: 1,
     };
     try {
       await DB.create(dataVenda);
+      Alert.alert("Venda Cadastrada Com Sucesso");
+      router.push("orders");
     } catch (error) {
       console.error(error);
       Alert.alert("Não Foi possivel Salvar Venda ");
@@ -108,6 +102,15 @@ function NewOrderScreen() {
           onValueChange={setSelectedChavePix}
           items={listaChavexPix}
         />
+      </View>
+      <View>
+        <MyInput
+          label="Descricao Compra"
+          placeholder="ex: 3 espetinhos"
+          keyboardType="default"
+          value={descricaoCompra}
+          onChangeText={setDescricaoCompra}
+        ></MyInput>
       </View>
       <View>
         <MyInput

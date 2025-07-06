@@ -19,7 +19,6 @@ function OrderScreen() {
   const list = useCallback(async () => {
     try {
       const response = await DB.getVendasFormatadas();
-      console.log(response);
       setCompras(response);
     } catch (error) {
       console.error("Erro ao listar vendas:", error);

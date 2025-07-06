@@ -1,10 +1,11 @@
-import { useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
-import React, { useCallback, useState } from "react";
+import { Picker } from "@react-native-picker/picker";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import React, { useCallback, useEffect, useState } from "react";
 import { Alert, View } from "react-native";
 import { Text } from "react-native-paper";
+
 import Calender from "../../../components/Calender/Calender";
 import MyButton from "../../../components/MyButton/MyButton";
-import { Picker } from "@react-native-picker/picker";
 import MyInput from "../../../components/MyInput/MyInput";
 import MyPicker from "../../../components/MyPicker/MyPicker";
 import {
@@ -20,6 +21,7 @@ import {
   ComprasDatabaseFormatada,
   useOrderDatabase,
 } from "../../../database/useOrderDatabase";
+import styleDetailOrder from "./DetailOrderScreenStyle";
 
 function DetailOrderScreen() {
   const router = useRouter();
@@ -36,6 +38,9 @@ function DetailOrderScreen() {
   const [statusPagamento, setStatusPagamento] = useState<number>(0);
   const [valorVenda, setValorVenda] = useState<string>("");
   const [dataAgendamentoPix, setDataAgendamentoPix] = useState<string>("");
+  const [descricaoCompra, setDescricaoCompra] = useState<string | undefined>(
+    "",
+  );
 
   const buscarClientes = useCallback(async () => {
     try {
@@ -66,6 +71,7 @@ function DetailOrderScreen() {
         setValorVenda(String(compra.valor));
         setPixAgendado(Boolean(compra.agendado));
         setStatusPagamento(compra.status);
+        setDescricaoCompra(compra.descricao);
         setDataAgendamentoPix(
           compra.dataAgendamento
             ? new Date(compra.dataAgendamento).toISOString().split("T")[0]
@@ -77,16 +83,14 @@ function DetailOrderScreen() {
     }
   }, [DB, id]);
 
-  useFocusEffect(
-    useCallback(() => {
-      const carregarDados = async () => {
-        await buscarClientes();
-        await buscarChavePix();
-        await buscarDadosCompra();
-      };
-      carregarDados();
-    }, [buscarClientes, buscarChavePix, buscarDadosCompra]),
-  );
+  useEffect(() => {
+    const carregarDados = async () => {
+      await buscarClientes();
+      await buscarChavePix();
+      await buscarDadosCompra();
+    };
+    carregarDados();
+  }, [id, buscarChavePix, buscarDadosCompra, buscarClientes]);
 
   const listaDeClientes = clientes.map((cliente) => ({
     label: cliente.nome,
@@ -107,6 +111,7 @@ function DetailOrderScreen() {
       agendado: pixAgendado ? 1 : 0,
       dataAgendamento: dataAgendamentoPix || null,
       status: statusPagamento,
+      descricao: descricaoCompra,
     };
 
     try {
@@ -147,6 +152,15 @@ function DetailOrderScreen() {
           value={valorVenda}
           onChangeText={setValorVenda}
         />
+      </View>
+      <View>
+        <MyInput
+          label="Descricao Compra"
+          placeholder="ex: 3 espetinhos"
+          keyboardType="default"
+          value={descricaoCompra}
+          onChangeText={setDescricaoCompra}
+        ></MyInput>
       </View>
       <View>
         <Text>Esse pix é agendado?</Text>
@@ -192,7 +206,7 @@ function DetailOrderScreen() {
           }}
         />
       </View>
-      <View>
+      <View style={styleDetailOrder.space}>
         <MyButton title="Atualizar Venda" icon="send" action={atualizarOrder} />
       </View>
     </View>

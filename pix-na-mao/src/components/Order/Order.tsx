@@ -4,6 +4,7 @@ import { Text } from "react-native-paper";
 
 import { ComprasDatabaseFormatada } from "../../database/useOrderDatabase";
 import OrderStyle from "./OrderStyle";
+import Colors from "../../constants/Color";
 
 interface OrderProps {
   data: ComprasDatabaseFormatada;
@@ -14,7 +15,17 @@ interface OrderProps {
 function Order({ data, action, secondAction }: OrderProps) {
   return (
     <TouchableOpacity onPress={action} onLongPress={secondAction}>
-      <View style={OrderStyle.card}>
+      <View
+        style={[
+          OrderStyle.card,
+          {
+            backgroundColor:
+              data.status === 1
+                ? Colors.light.primaryContainer
+                : Colors.light.errorContainer,
+          },
+        ]}
+      >
         <View style={OrderStyle.client}>
           <Text>
             ID:{data.id} Cliente: {data.idCliente} - {data.nomeCliente}
