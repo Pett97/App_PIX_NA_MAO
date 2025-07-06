@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import { Alert, FlatList, View } from "react-native";
 
 import MyButton from "../../../components/MyButton/MyButton";
 import Order from "../../../components/Order/Order";
-import { router, useRouter } from "expo-router";
+import { router, useFocusEffect, useRouter } from "expo-router";
 import {
   ComprasDatabaseFormatada,
   useOrderDatabase,
@@ -16,12 +16,15 @@ function OrderScreen() {
   const router = useRouter();
   const [compras, setCompras] = React.useState<ComprasDatabaseFormatada[]>([]);
 
-  useEffect(() => {
-    list();
-  });
+  useFocusEffect(
+    useCallback(() => {
+      list();
+    }, [])
+  );
 
   async function list() {
     const response = await DB.getVendasFormatadas();
+    console.log(response);
     setCompras(response);
   }
 
@@ -29,8 +32,8 @@ function OrderScreen() {
     router.push("orders/NewOrder");
   }
 
-  function detailOrderRedirect(idOrder: number): void {
-    router.push(`orders/${idOrder}`);
+  function detailOrderRedirect(order: ComprasDatabaseFormatada): void {
+    router.push(`orders/${order.id}`);
   }
 
   async function destroyOrder(order: ComprasDatabaseFormatada) {
@@ -60,7 +63,7 @@ function OrderScreen() {
           renderItem={({ item }) => (
             <Order
               data={item}
-              action={() => detailOrderRedirect(Number(item.id))}
+              action={() => detailOrderRedirect(item)}
               secondAction={() => {
                 handleDelete("Cancelar", "Deletar", () => destroyOrder(item));
               }}

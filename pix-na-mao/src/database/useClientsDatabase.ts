@@ -42,12 +42,9 @@ export function useClientsDatabase() {
   }
 
   async function searchByNome(nome: string) {
-    console.log(nome);
     try {
       const query = "SELECT * FROM clientes WHERE nome LIKE ?"
-
       const response = await database.getAllAsync<ClientDatabase>(query, `%${nome}%`);
-      console.log(response);
       return response;
     } catch (error) {
       throw error;

@@ -1,4 +1,5 @@
 import { useSQLiteContext } from 'expo-sqlite';
+import { Alert } from 'react-native';
 
 export interface ComprasDatabase {
    id?: number;
@@ -75,20 +76,23 @@ export function useOrderDatabase() {
    }
 
    async function getCompraById(idCompra: number): Promise<ComprasDatabaseFormatada | null> {
-      const query = `SELECT 
-               compras.id,
-               compras.valor,
-               compras.id_chave_pix AS idChavePix,
-               compras.id_cliente AS idCliente,
-               compras.agendado,
-               compras.data_agendamento AS dataAgendamento,
-               compras.status,
-               compras.descricao,
-               clientes.nome AS nomeCliente,
-               clientes.contato AS contatoCliente,
-               clientes.devedor AS devedorCliente
-               FROM compras
-               JOIN clientes ON compras.id_cliente = clientes.id`;
+      const query = `
+      SELECT 
+          compras.id,
+          compras.valor,
+          compras.id_chave_pix AS idChavePix,
+          compras.id_cliente AS idCliente,
+          compras.agendado,
+          compras.data_agendamento AS dataAgendamento,
+          compras.status,
+          compras.descricao,
+          clientes.nome AS nomeCliente,
+          clientes.contato AS contatoCliente,
+          clientes.devedor AS devedorCliente
+      FROM compras
+      JOIN clientes ON compras.id_cliente = clientes.id
+      WHERE compras.id = ?;
+   `;
       try {
          const response = await database.getFirstAsync<ComprasDatabaseFormatada>(query, [idCompra]);
          return response;
@@ -98,16 +102,18 @@ export function useOrderDatabase() {
       }
    }
    async function update(data: ComprasDatabase) {
+      console.log("Atualizando compra:", data);
+
       const statement = await database.prepareAsync(
          `UPDATE compras SET
-        valor = $valor,
-        id_chave_pix = $id_chave_pix,
-        id_cliente = $id_cliente,
-        agendado = $agendado,
-        data_agendamento = $data_agendamento,
-        status = $status,
-        descricao = $descricao
-      WHERE id = $id`
+         valor = $valor,
+         id_chave_pix = $id_chave_pix,
+         id_cliente = $id_cliente,
+         agendado = $agendado,
+         data_agendamento = $data_agendamento,
+         status = $status,
+         descricao = $descricao
+       WHERE id = $id`
       );
 
       try {
@@ -117,15 +123,20 @@ export function useOrderDatabase() {
             $id_chave_pix: data.idChavePix,
             $id_cliente: data.idCliente,
             $agendado: data.agendado,
-            $data_agendamento: data.dataAgendamento,
+            $data_agendamento: data.dataAgendamento ?? null,
             $status: data.status ?? 0,
-            $descricao: data.descricao,
+            $descricao: data.descricao ?? null,
          } as any);
+
+         console.log("Resultado do update:", result);
          await statement.finalizeAsync();
+         return result; // Retorna result pra saber quantas linhas foram afetadas
       } catch (error) {
+         console.error("Erro no update:", error);
          throw error;
       }
    }
+
 
    async function remove(data: ComprasDatabase) {
       const statement = await database.prepareAsync(
@@ -145,19 +156,19 @@ export function useOrderDatabase() {
       try {
          const query = `
             SELECT 
-        compras.id,
-        compras.valor,
-        compras.id_chave_pix AS idChavePix,
-        compras.id_cliente AS idCliente,
-        compras.agendado,
-        compras.data_agendamento AS dataAgendamento,
-        compras.status,
-        compras.descricao,
-        clientes.nome AS nomeCliente,
-        clientes.contato AS contatoCliente,
-        clientes.devedor AS devedorCliente
-      FROM compras
-      JOIN clientes ON compras.id_cliente = clientes.id
+            compras.id,
+            compras.valor,
+            compras.id_chave_pix AS idChavePix,
+            compras.id_cliente AS idCliente,
+            compras.agendado,
+            compras.data_agendamento AS dataAgendamento,
+            compras.status,
+            compras.descricao,
+            clientes.nome AS nomeCliente,
+            clientes.contato AS contatoCliente,
+            clientes.devedor AS devedorCliente
+            FROM compras
+            JOIN clientes ON compras.id_cliente = clientes.id
     `;
 
          const result = await database.getAllAsync<ComprasDatabaseFormatada>(query);

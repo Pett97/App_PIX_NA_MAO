@@ -1,5 +1,5 @@
 import React from "react";
-import PixScreen from "../../src/screen/pix/PixScreen";
+import PixScreen from "../../../src/screen/pix/PixScreen";
 
 function ChavesPix() {
   return (

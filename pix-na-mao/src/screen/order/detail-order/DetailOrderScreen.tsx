@@ -1,8 +1,9 @@
 import { Picker } from "@react-native-picker/picker";
-import { useFocusEffect, useLocalSearchParams } from "expo-router";
+import { useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
 import React, { useCallback, useEffect, useState } from "react";
 import { Alert, View } from "react-native";
 import { Text } from "react-native-paper";
+import { router } from "expo-router";
 
 import Calender from "../../../components/Calender/Calender";
 import MyButton from "../../../components/MyButton/MyButton";
@@ -23,6 +24,7 @@ import {
 } from "../../../database/useOrderDatabase";
 
 function DetailOrderScreen() {
+  const router = useRouter();
   const { id } = useLocalSearchParams();
   const databaseCompras = useOrderDatabase();
   const databaseClientes = useClientsDatabase();
@@ -34,7 +36,8 @@ function DetailOrderScreen() {
   const [selectedCliente, setSelectedCliente] = useState<string>("");
   const [selectedChavePix, setSelectedChavePix] = useState<string>("");
   const [pixAgendado, setPixAgendado] = useState<boolean>(false);
-  const [valorVenda, setValorVenda] = useState("");
+  const [statusPagamento, setStatusPagamento] = useState<Number>(0);
+  const [valorVenda, setValorVenda] = useState<string>("");
   const [dataAgendamentoPix, setDataAgendamentoPix] = useState<string>("");
 
   async function buscarClientes() {
@@ -49,9 +52,10 @@ function DetailOrderScreen() {
 
   async function buscarDadosCompra() {
     try {
-      const compra:ComprasDatabaseFormatada|null = await DB.getCompraById(Number(id));
+      const compra: ComprasDatabaseFormatada | null = await DB.getCompraById(
+        Number(id)
+      );
       if (compra) {
-        console.log(compra);
         setSelectedCliente(String(compra.idCliente));
         setSelectedChavePix(String(compra.idChavePix));
         setValorVenda(String(compra.valor));
@@ -67,16 +71,16 @@ function DetailOrderScreen() {
     }
   }
 
-useFocusEffect(
-  useCallback(() => {
-    const carregarDados = async () => {
-      await buscarClientes();
-      await buscarChavePix();
-      await buscarDadosCompra();
-    };
-    carregarDados();
-  }, [])
-);
+  useFocusEffect(
+    useCallback(() => {
+      const carregarDados = async () => {
+        await buscarClientes();
+        await buscarChavePix();
+        await buscarDadosCompra();
+      };
+      carregarDados();
+    }, [id])
+  );
 
   const listaDeClientes = clientes.map((cliente) => ({
     label: cliente.nome,
@@ -89,18 +93,23 @@ useFocusEffect(
   }));
 
   async function atualizarOrder() {
-    const dataVenda: ComprasDatabaseFormatada = {
+    const dataVenda: ComprasDatabase = {
+      id: Number(id),
       valor: Number(valorVenda),
       idChavePix: Number(selectedChavePix),
       idCliente: Number(selectedCliente),
-      agendado: Number(pixAgendado),
-      dataAgendamento: dataAgendamentoPix,
+      agendado: pixAgendado ? 1 : 0,
+      dataAgendamento: dataAgendamentoPix || null,
       status: 1,
     };
+
     try {
-      const response = await DB.update(dataVenda);
+      console.log("Atualizando com dados:", dataVenda);
+      await DB.update(dataVenda);
+      Alert.alert("Venda atualizada com sucesso!");
     } catch (error) {
-      Alert.alert("Não Foi possivel Atualizar Venda ");
+      console.error("Erro ao atualizar:", error);
+      Alert.alert("Não foi possível atualizar a venda");
     }
   }
 
@@ -148,6 +157,32 @@ useFocusEffect(
           onChangeData={setDataAgendamentoPix}
           dataAgendamento={dataAgendamentoPix}
         ></Calender>
+      </View>
+      <View>
+        <Text>Selcionar o Status Desse Pagamento</Text>
+        <Picker selectedValue={statusPagamento ? "true" : "false"}>
+          <Picker.Item label="ABERTO" value="0" />
+          <Picker.Item label="PAGO" value="1" />
+          <Picker.Item label="ATRASADO" value="2" />
+        </Picker>
+      </View>
+      <View>
+        <MyButton
+          title="Mostrar QRCODE"
+          icon="bank"
+          action={() => {
+            router.push({
+              pathname: "orders/ShowQrCode",
+              params: {
+                chavePix: "chave-pix-aqui",
+                nomeRecebedor: "Nome Recebedor",
+                cidadeRecebedor: "Cidade Recebedor",
+                valor: Number(valorVenda),
+                infoAdicional: "Pagamento de teste",
+              },
+            });
+          }}
+        ></MyButton>
       </View>
       <View>
         <MyButton

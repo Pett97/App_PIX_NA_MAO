@@ -17,7 +17,7 @@ function Order({ data, action, secondAction }: OrderProps) {
       <View style={OrderStyle.card}>
         <View style={OrderStyle.client}>
           <Text>
-            Cliente: {data.idCliente} - {data.nomeCliente}
+            ID:{data.id} Cliente: {data.idCliente} - {data.nomeCliente}
           </Text>
         </View>
         <View style={OrderStyle.orderAbout}>
