@@ -62,6 +62,28 @@ function NewOrderScreen() {
     value: String(chavePix.id),
   }));
 
+  function validateVenda(data: ComprasDatabase): boolean {
+    if (!data.idCliente) {
+      Alert.alert("Erro", "Selecione um cliente para a venda.");
+      return false;
+    }
+
+    if (!data.idChavePix) {
+      Alert.alert("Erro", "Selecione uma chave Pix para a venda.");
+      return false;
+    }
+
+    if (data.valor <= 0.1 || data.valor > 1000) {
+      Alert.alert(
+        "Erro",
+        "O valor da venda deve ser maior que 0.1 e menor ou igual a 1000.",
+      );
+      return false;
+    }
+
+    return true;
+  }
+
   async function salvarVenda() {
     const dataVenda: ComprasDatabase = {
       valor: Number(valorVenda),
@@ -72,13 +94,16 @@ function NewOrderScreen() {
       descricao: descricaoCompra,
       status: 1,
     };
+
+    if (!validateVenda(dataVenda)) return;
+
     try {
       await DB.create(dataVenda);
       Alert.alert("Venda Cadastrada Com Sucesso");
       router.push("orders");
     } catch (error) {
       console.error(error);
-      Alert.alert("Não Foi possivel Salvar Venda ");
+      Alert.alert("Não Foi possível Salvar Venda");
     }
   }
 
@@ -97,7 +122,7 @@ function NewOrderScreen() {
       <View>
         <Text>Selecionar Chave Pix</Text>
         <MyPicker
-          label="Selecione a chave pix "
+          label="Selecione a chave pix"
           value={selectedChavePix}
           onValueChange={setSelectedChavePix}
           items={listaChavexPix}
@@ -110,7 +135,7 @@ function NewOrderScreen() {
           keyboardType="default"
           value={descricaoCompra}
           onChangeText={setDescricaoCompra}
-        ></MyInput>
+        />
       </View>
       <View>
         <MyInput
@@ -119,10 +144,10 @@ function NewOrderScreen() {
           keyboardType="numeric"
           value={valorVenda}
           onChangeText={setValorVenda}
-        ></MyInput>
+        />
       </View>
       <View>
-        <Text>esse pix é agendado? </Text>
+        <Text>Esse pix é agendado?</Text>
         <Picker
           selectedValue={pixAgendado ? "true" : "false"}
           onValueChange={(itemValue) => setPixAgendado(itemValue === "true")}
@@ -135,16 +160,10 @@ function NewOrderScreen() {
         <Calender
           onChangeData={setDataAgendamentoPix}
           dataAgendamento={dataAgendamentoPix}
-        ></Calender>
+        />
       </View>
       <View>
-        <MyButton
-          title="Salvar Venda"
-          icon="send"
-          action={() => {
-            salvarVenda();
-          }}
-        ></MyButton>
+        <MyButton title="Salvar Venda" icon="send" action={salvarVenda} />
       </View>
     </View>
   );

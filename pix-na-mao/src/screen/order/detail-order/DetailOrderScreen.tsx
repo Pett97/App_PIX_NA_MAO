@@ -82,15 +82,19 @@ function DetailOrderScreen() {
       console.error("Erro ao buscar compra:", error);
     }
   }, [DB, id]);
+  const loadedRef = React.useRef(false);
 
   useEffect(() => {
-    const carregarDados = async () => {
-      await buscarClientes();
-      await buscarChavePix();
-      await buscarDadosCompra();
-    };
-    carregarDados();
-  }, [id, buscarChavePix, buscarDadosCompra, buscarClientes]);
+    if (!loadedRef.current) {
+      const carregarDados = async () => {
+        await buscarClientes();
+        await buscarChavePix();
+        await buscarDadosCompra();
+        loadedRef.current = true;
+      };
+      carregarDados();
+    }
+  }, [buscarClientes, buscarChavePix, buscarDadosCompra]);
 
   const listaDeClientes = clientes.map((cliente) => ({
     label: cliente.nome,
@@ -101,6 +105,28 @@ function DetailOrderScreen() {
     label: `${chavePix.nome_recebedor} - ${chavePix.chave_pix}`,
     value: String(chavePix.id),
   }));
+
+  function validateVenda(data: ComprasDatabase): boolean {
+    if (!data.idCliente) {
+      Alert.alert("Erro", "Selecione um cliente para a venda.");
+      return false;
+    }
+
+    if (!data.idChavePix) {
+      Alert.alert("Erro", "Selecione uma chave Pix para a venda.");
+      return false;
+    }
+
+    if (data.valor <= 0.1 || data.valor > 1000) {
+      Alert.alert(
+        "Erro",
+        "O valor da venda deve ser maior que 0.1 e menor ou igual a 1000.",
+      );
+      return false;
+    }
+
+    return true;
+  }
 
   async function atualizarOrder() {
     const dataVenda: ComprasDatabase = {
@@ -114,9 +140,11 @@ function DetailOrderScreen() {
       descricao: descricaoCompra,
     };
 
+    if (!validateVenda(dataVenda)) return;
+
     try {
-      console.log("Atualizando com dados:", dataVenda);
       await DB.update(dataVenda);
+      router.push("orders");
       Alert.alert("Venda atualizada com sucesso!");
     } catch (error) {
       console.error("Erro ao atualizar:", error);
@@ -181,7 +209,7 @@ function DetailOrderScreen() {
       <View>
         <Text>Selecionar o Status desse Pagamento</Text>
         <Picker
-          selectedValue={statusPagamento.toString()}
+          selectedValue={String(statusPagamento)}
           onValueChange={(itemValue) => setStatusPagamento(Number(itemValue))}
         >
           <Picker.Item label="ABERTO" value="0" />

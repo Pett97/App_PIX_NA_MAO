@@ -17,6 +17,7 @@ function NewPixScreen() {
   const [chavePix, setChavePix] = React.useState("");
   const [cidadeRecebedor, setCidadeRecebedor] = React.useState("");
   async function create(data: ChavePixDatabase) {
+    if (!validate(data)) return;
     try {
       await DB.create(data);
       Alert.alert("Chave Cadastrada Com Sucesso");
@@ -24,6 +25,22 @@ function NewPixScreen() {
     } catch (error) {
       console.log(error);
     }
+  }
+
+  function validate(data: ChavePixDatabase): boolean {
+    if (!data.chave_pix) {
+      Alert.alert("Chave não pode ser cadastrada vazia");
+      return false;
+    }
+
+    if (!data.nome_recebedor || data.nome_recebedor.length < 3) {
+      Alert.alert(
+        "Nome Recebedor não pode ser vazio ou ter menos que 3 letras",
+      );
+      return false;
+    }
+
+    return true;
   }
 
   return (
