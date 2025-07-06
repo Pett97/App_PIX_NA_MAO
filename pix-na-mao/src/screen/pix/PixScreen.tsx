@@ -1,47 +1,53 @@
-import { useFocusEffect, useRouter } from 'expo-router';
-import React, { useCallback, useEffect, useState } from 'react';
-import { Alert, FlatList, View } from 'react-native';
+import { useFocusEffect, useRouter } from "expo-router";
+import React, { useCallback } from "react";
+import { Alert, FlatList, View } from "react-native";
 
-import Chave from '../../components/Chave/Chave';
-import MyButton from '../../components/MyButton/MyButton';
-import { ChavePixDatabase, useChavePixDatabse } from '../../database/useChavesPixDatabase';
-import { handleDelete } from '../../handle/handleDelete';
-import StylePixScreen from './StylePixScrenn';
+import Chave from "../../components/Chave/Chave";
+import MyButton from "../../components/MyButton/MyButton";
+import {
+  ChavePixDatabase,
+  useChavePixDatabse,
+} from "../../database/useChavesPixDatabase";
+import { handleDelete } from "../../handle/handleDelete";
+import StylePixScreen from "./StylePixScrenn";
 
 export default function PixScreen() {
   const DB = useChavePixDatabse();
   const router = useRouter();
   const [chaves, setChaves] = React.useState<ChavePixDatabase[]>([]);
 
-  //para puxar os dados
-  useFocusEffect(
-    useCallback(() => {
-      list();
-    }, [])
-  );
-
-  async function list() {
+  const list = useCallback(async () => {
     try {
       const response = await DB.getAll();
       setChaves(response);
     } catch (error) {
       console.log(error);
     }
-  }
+  }, [DB]);
 
-  async function remove(data: ChavePixDatabase) {
-    try {
-      await DB.remove(data);
+  //para puxar os dados
+  useFocusEffect(
+    useCallback(() => {
       list();
-    } catch (error) {
-      Alert.alert("Não foi possivel deletar chave pix");
-    }
-  }
+    }, [list]),
+  );
 
-  function redirect() {
-    const router = useRouter();
+  const remove = useCallback(
+    async (data: ChavePixDatabase) => {
+      try {
+        await DB.remove(data);
+        list();
+      } catch (error) {
+        console.error(error);
+        Alert.alert("Não foi possivel deletar chave pix");
+      }
+    },
+    [DB, list],
+  );
+
+  const redirect = useCallback(() => {
     router.push("chaves_pix/NewChave");
-  }
+  }, [router]);
 
   return (
     <View style={StylePixScreen.container}>
@@ -51,7 +57,7 @@ export default function PixScreen() {
           icon="plus-circle"
           mode="contained"
           action={redirect}
-        ></MyButton>
+        />
       </View>
       <View style={{ flex: 1, margin: 15 }}>
         <FlatList
@@ -60,17 +66,17 @@ export default function PixScreen() {
           renderItem={({ item }) => (
             <Chave
               nome_recebedor={item.nome_recebedor}
-              cidade_recebedor={item.cidade_recebedor ?? "GURAPAUVA"}
+              cidade_recebedor={item.cidade_recebedor ?? "GUARAPUAVA"}
               chave_pix={item.chave_pix}
               action={() => {
                 router.push(`chaves_pix/${item.id}`);
               }}
               secondAction={() => {
-                handleDelete("Cencelar", "Deletar", () => remove(item));
+                handleDelete("Cancelar", "Deletar", () => remove(item));
               }}
-            ></Chave>
+            />
           )}
-        ></FlatList>
+        />
       </View>
     </View>
   );

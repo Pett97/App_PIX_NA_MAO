@@ -1,12 +1,9 @@
-import React from 'react';
-import { View } from 'react-native';
+import React from "react";
 
-import NewPixScreen from '../../../src/screen/pix/new/NewPixScreen';
+import NewPixScreen from "../../../src/screen/pix/new/NewPixScreen";
 
 function NewChave() {
-  return (
-      <NewPixScreen></NewPixScreen>
-  );
+  return <NewPixScreen></NewPixScreen>;
 }
 
 export default NewChave;

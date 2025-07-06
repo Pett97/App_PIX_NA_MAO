@@ -1,10 +1,13 @@
-import { useLocalSearchParams, useRouter } from 'expo-router';
-import React, { useEffect, useState } from 'react';
-import { Alert, View } from 'react-native';
+import { useLocalSearchParams, useRouter } from "expo-router";
+import React, { useEffect, useState } from "react";
+import { Alert, View } from "react-native";
 
-import MyButton from '../../../components/MyButton/MyButton';
-import MyInput from '../../../components/MyInput/MyInput';
-import { ChavePixDatabase, useChavePixDatabse } from '../../../database/useChavesPixDatabase';
+import MyButton from "../../../components/MyButton/MyButton";
+import MyInput from "../../../components/MyInput/MyInput";
+import {
+  ChavePixDatabase,
+  useChavePixDatabse,
+} from "../../../database/useChavesPixDatabase";
 
 function EditPixScreen() {
   const DB = useChavePixDatabse();
@@ -31,7 +34,7 @@ function EditPixScreen() {
     }
 
     loadChave();
-  }, [id]);
+  }, [id, DB]);
 
   async function update(data: ChavePixDatabase) {
     try {
@@ -68,7 +71,7 @@ function EditPixScreen() {
         icon="send"
         action={() =>
           update({
-            id:Number(id),
+            id: Number(id),
             chave_pix: chavePix,
             nome_recebedor: nomeRecebedor,
             cidade_recebedor: cidadeRecebedor,

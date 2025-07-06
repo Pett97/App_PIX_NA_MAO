@@ -1,4 +1,4 @@
-import { SQLiteDatabase } from 'expo-sqlite';
+import { SQLiteDatabase } from "expo-sqlite";
 
 export async function initializeDatabse(database: SQLiteDatabase) {
   try {
@@ -65,7 +65,6 @@ export async function initializeDatabse(database: SQLiteDatabase) {
     `);
 
     console.log("Banco inicializado com dados padrão.");
-
   } catch (error) {
     console.log("Erro ao inicializar o banco:");
     console.error(error);

@@ -7,7 +7,7 @@ import DateTimePicker, {
 
 interface CalenderProps {
   onChangeData: (data: string) => void;
-  dataAgendamento?: string; 
+  dataAgendamento?: string;
 }
 
 const Calender = ({ onChangeData, dataAgendamento }: CalenderProps) => {
@@ -36,7 +36,7 @@ const Calender = ({ onChangeData, dataAgendamento }: CalenderProps) => {
     if (selectedDate) {
       setDataSelecionada(selectedDate);
       const isoDateString = formatToYYYYMMDD(selectedDate);
-      onChangeData(isoDateString); 
+      onChangeData(isoDateString);
     }
   };
 

@@ -1,8 +1,8 @@
-import React from 'react';
-import { KeyboardTypeOptions, View } from 'react-native';
-import { TextInput } from 'react-native-paper';
+import React from "react";
+import { KeyboardTypeOptions, View } from "react-native";
+import { TextInput } from "react-native-paper";
 
-import InputStyle from './InputStyle';
+import InputStyle from "./InputStyle";
 
 interface MyInputProps {
   label: string;

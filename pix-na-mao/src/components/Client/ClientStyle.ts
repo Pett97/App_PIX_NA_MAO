@@ -1,8 +1,7 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet } from "react-native";
 
 const ClientStyle = StyleSheet.create({
-   container: {
-   }
+  container: {},
 });
 
 export default ClientStyle;

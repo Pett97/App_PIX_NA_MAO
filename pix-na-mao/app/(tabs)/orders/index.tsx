@@ -1,10 +1,8 @@
-import React from 'react'
-import OrderScreen from '../../../src/screen/order/order-list/orderScreen'
+import React from "react";
+import OrderScreen from "../../../src/screen/order/order-list/orderScreen";
 
 function OrderIndex() {
-  return (
-      <OrderScreen></OrderScreen>
-  )
+  return <OrderScreen></OrderScreen>;
 }
 
-export default OrderIndex
+export default OrderIndex;

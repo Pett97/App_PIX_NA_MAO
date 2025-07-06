@@ -1,10 +1,10 @@
-import { useSQLiteContext } from 'expo-sqlite';
+import { useSQLiteContext } from "expo-sqlite";
 
 export interface ClientDatabase {
   id?: number;
   nome: string;
   contato: string;
-  devedor: number;  // 0 = false, 1 = true é pra funcionar teoricament 
+  devedor: number; // 0 = false, 1 = true é pra funcionar teoricament
 }
 
 export function useClientsDatabase() {
@@ -12,13 +12,13 @@ export function useClientsDatabase() {
 
   async function create(data: Omit<ClientDatabase, "id">) {
     const statement = await database.prepareAsync(
-      "INSERT INTO clientes (nome, contato ,devedor) VALUES ($nome,$contato,$devedor)"
+      "INSERT INTO clientes (nome, contato ,devedor) VALUES ($nome,$contato,$devedor)",
     );
     try {
       const result = await statement.executeAsync({
         $nome: data.nome,
         $contato: data.contato,
-        $devedor: data.devedor
+        $devedor: data.devedor,
       });
       await statement.finalizeAsync();
 
@@ -43,8 +43,11 @@ export function useClientsDatabase() {
 
   async function searchByNome(nome: string) {
     try {
-      const query = "SELECT * FROM clientes WHERE nome LIKE ?"
-      const response = await database.getAllAsync<ClientDatabase>(query, `%${nome}%`);
+      const query = "SELECT * FROM clientes WHERE nome LIKE ?";
+      const response = await database.getAllAsync<ClientDatabase>(
+        query,
+        `%${nome}%`,
+      );
       return response;
     } catch (error) {
       throw error;
@@ -53,14 +56,14 @@ export function useClientsDatabase() {
 
   async function update(data: ClientDatabase) {
     const statement = await database.prepareAsync(
-      "UPDATE clientes SET nome = $nome, devedor = $devedor,contato = $contato WHERE id = $id"
+      "UPDATE clientes SET nome = $nome, devedor = $devedor,contato = $contato WHERE id = $id",
     );
     try {
-      const result = await statement.executeAsync({
+      await statement.executeAsync({
         $id: Number(data.id),
         $contato: data.contato,
         $nome: data.nome,
-        $devedor: data.devedor
+        $devedor: data.devedor,
       });
       await statement.finalizeAsync();
     } catch (error) {
@@ -70,11 +73,11 @@ export function useClientsDatabase() {
 
   async function remove(data: ClientDatabase) {
     const statement = await database.prepareAsync(
-      "DELETE FROM clientes WHERE id = $id"
+      "DELETE FROM clientes WHERE id = $id",
     );
     try {
       const result = await statement.executeAsync({
-        $id: Number(data.id)
+        $id: Number(data.id),
       });
       await statement.finalizeAsync();
 

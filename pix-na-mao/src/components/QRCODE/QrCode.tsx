@@ -12,12 +12,26 @@ interface QRCODEProps {
 }
 
 // TODO na info adicional colocar o nome do pagadador
-function QrCode({ chavePix,nomeRecebedor,cidadeRecebedor,valor,infoAdicional}:QRCODEProps) {
-   const pix =  gerarPayloadPix({chavePix,nomeRecebedor,cidadeRecebedor,valor,infoAdicional});
+function QrCode({
+  chavePix,
+  nomeRecebedor,
+  cidadeRecebedor,
+  valor,
+  infoAdicional,
+}: QRCODEProps) {
+  const pix = gerarPayloadPix({
+    chavePix,
+    nomeRecebedor,
+    cidadeRecebedor,
+    valor,
+    infoAdicional,
+  });
 
-  return <View>
-   <QRCode value={pix} size={200}></QRCode>
-  </View>;
+  return (
+    <View>
+      <QRCode value={pix} size={200}></QRCode>
+    </View>
+  );
 }
 
 export default QrCode;

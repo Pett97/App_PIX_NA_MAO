@@ -1,10 +1,13 @@
-import { useRouter } from 'expo-router';
-import React, { use, useEffect } from 'react';
-import { Alert, View } from 'react-native';
+import { useRouter } from "expo-router";
+import React from "react";
+import { Alert, View } from "react-native";
 
-import MyButton from '../../../components/MyButton/MyButton';
-import MyInput from '../../../components/MyInput/MyInput';
-import { ChavePixDatabase, useChavePixDatabse } from '../../../database/useChavesPixDatabase';
+import MyButton from "../../../components/MyButton/MyButton";
+import MyInput from "../../../components/MyInput/MyInput";
+import {
+  ChavePixDatabase,
+  useChavePixDatabse,
+} from "../../../database/useChavesPixDatabase";
 
 function NewPixScreen() {
   const DB = useChavePixDatabse();

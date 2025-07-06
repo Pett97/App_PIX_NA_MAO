@@ -1,16 +1,25 @@
-import { Picker } from '@react-native-picker/picker';
-import { useFocusEffect } from 'expo-router';
-import React, { useCallback, useEffect, useState } from 'react';
-import { Alert, View } from 'react-native';
-import { Text } from 'react-native-paper';
+import { Picker } from "@react-native-picker/picker";
+import { useFocusEffect } from "expo-router";
+import React, { useCallback, useState } from "react";
+import { Alert, View } from "react-native";
+import { Text } from "react-native-paper";
 
-import Calender from '../../../components/Calender/Calender';
-import MyButton from '../../../components/MyButton/MyButton';
-import MyInput from '../../../components/MyInput/MyInput';
-import MyPicker from '../../../components/MyPicker/MyPicker';
-import { ChavePixDatabase, useChavePixDatabse } from '../../../database/useChavesPixDatabase';
-import { ClientDatabase, useClientsDatabase } from '../../../database/useClientsDatabase';
-import { ComprasDatabase, useOrderDatabase } from '../../../database/useOrderDatabase';
+import Calender from "../../../components/Calender/Calender";
+import MyButton from "../../../components/MyButton/MyButton";
+import MyInput from "../../../components/MyInput/MyInput";
+import MyPicker from "../../../components/MyPicker/MyPicker";
+import {
+  ChavePixDatabase,
+  useChavePixDatabse,
+} from "../../../database/useChavesPixDatabase";
+import {
+  ClientDatabase,
+  useClientsDatabase,
+} from "../../../database/useClientsDatabase";
+import {
+  ComprasDatabase,
+  useOrderDatabase,
+} from "../../../database/useOrderDatabase";
 
 function NewOrderScreen() {
   const databaseClientes = useClientsDatabase();
@@ -25,21 +34,31 @@ function NewOrderScreen() {
   const [valorVenda, setValorVenda] = useState("");
   const [dataAgendamentoPix, setDataAgendamentoPix] = useState<string>("");
 
-  async function buscarClientes() {
-    const response = await databaseClientes.getAll();
-    setClientes(response);
-  }
+  // async function buscarClientes() {
+  //   const response = await databaseClientes.getAll();
+  //   setClientes(response);
+  // }
 
-  async function buscarChavePix() {
-    const response = await databaseChavePix.getAll();
-    setChavesPix(response);
-  }
+  // async function buscarChavePix() {
+  //   const response = await databaseChavePix.getAll();
+  //   setChavesPix(response);
+  // }
 
   useFocusEffect(
     useCallback(() => {
+      async function buscarClientes() {
+        const response = await databaseClientes.getAll();
+        setClientes(response);
+      }
+
+      async function buscarChavePix() {
+        const response = await databaseChavePix.getAll();
+        setChavesPix(response);
+      }
+
       buscarChavePix();
       buscarClientes();
-    }, [])
+    }, [databaseClientes, databaseChavePix]),
   );
 
   const listaDeClientes = clientes.map((cliente) => ({
@@ -62,8 +81,9 @@ function NewOrderScreen() {
       status: 1,
     };
     try {
-      const response = await DB.create(dataVenda);
+      await DB.create(dataVenda);
     } catch (error) {
+      console.error(error);
       Alert.alert("Não Foi possivel Salvar Venda ");
     }
   }
@@ -109,7 +129,10 @@ function NewOrderScreen() {
         </Picker>
       </View>
       <View>
-        <Calender onChangeData={setDataAgendamentoPix} dataAgendamento={dataAgendamentoPix}></Calender>
+        <Calender
+          onChangeData={setDataAgendamentoPix}
+          dataAgendamento={dataAgendamentoPix}
+        ></Calender>
       </View>
       <View>
         <MyButton

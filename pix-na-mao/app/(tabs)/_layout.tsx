@@ -44,7 +44,7 @@ const CustomLightTheme = {
 const CombinedDefaultTheme = merge(LightTheme, CustomLightTheme);
 const CombinedDarkTheme = merge(DarkTheme, CustomDarkTheme);
 
-export default function _layout() {
+export default function Layout() {
   const colorScheme = useColorScheme();
 
   const paperTheme =
