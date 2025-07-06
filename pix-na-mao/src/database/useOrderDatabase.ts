@@ -105,8 +105,6 @@ export function useOrderDatabase() {
     }
   }
   async function update(data: ComprasDatabase) {
-    console.log("Atualizando compra:", data);
-
     const statement = await database.prepareAsync(
       `UPDATE compras SET
          valor = $valor,
@@ -130,8 +128,6 @@ export function useOrderDatabase() {
         $status: data.status ?? 0,
         $descricao: data.descricao ?? null,
       } as any);
-
-      console.log("Resultado do update:", result);
       await statement.finalizeAsync();
       return result; // Retorna result pra saber quantas linhas foram afetadas
     } catch (error) {
