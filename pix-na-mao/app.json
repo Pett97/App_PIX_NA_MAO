@@ -6,6 +6,7 @@
     "name": "pix-na-mao",
     "slug": "pix-na-mao",
     "scheme": "pix-na-mao",
+    "deepLinks": ["pix-na-mao://*"],
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./app/assets/icon.png",

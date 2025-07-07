@@ -144,7 +144,7 @@ function DetailOrderScreen() {
 
     try {
       await DB.update(dataVenda);
-      router.push("orders");
+      router.push("/tabs/orders");
       Alert.alert("Venda atualizada com sucesso!");
     } catch (error) {
       console.error("Erro ao atualizar:", error);
@@ -222,7 +222,7 @@ function DetailOrderScreen() {
           icon="bank"
           action={() => {
             router.push({
-              pathname: "orders/ShowQrCode",
+              pathname: "/tabs/orders/ShowQrCode",
               params: {
                 chavePix: "chave-pix-aqui",
                 nomeRecebedor: "Nome Recebedor",

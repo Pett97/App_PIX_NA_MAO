@@ -21,7 +21,7 @@ function NewPixScreen() {
     try {
       await DB.create(data);
       Alert.alert("Chave Cadastrada Com Sucesso");
-      router.push("chaves_pix/Index");
+      router.push("/tabs/chaves_pix/Index");
     } catch (error) {
       console.log(error);
     }

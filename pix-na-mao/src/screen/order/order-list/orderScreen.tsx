@@ -26,12 +26,12 @@ function OrderScreen() {
   }, [DB]);
 
   const redirect = useCallback(() => {
-    router.push("orders/NewOrder");
+    router.push("/tabs/orders/NewOrder");
   }, [router]);
 
   const detailOrderRedirect = useCallback(
     (order: ComprasDatabaseFormatada) => {
-      router.push(`orders/${order.id}`);
+      router.push(`/tabs/orders/${order.id}`);
     },
     [router],
   );

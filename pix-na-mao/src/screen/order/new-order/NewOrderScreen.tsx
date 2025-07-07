@@ -100,7 +100,7 @@ function NewOrderScreen() {
     try {
       await DB.create(dataVenda);
       Alert.alert("Venda Cadastrada Com Sucesso");
-      router.push("orders");
+      router.push("/tabs/orders");
     } catch (error) {
       console.error(error);
       Alert.alert("Não Foi possível Salvar Venda");

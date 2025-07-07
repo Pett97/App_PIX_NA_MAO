@@ -13,6 +13,7 @@ import {
   MD3LightTheme,
   PaperProvider,
 } from "react-native-paper";
+import * as Linking from "expo-linking";
 
 import Colors from "../src/constants/Color";
 import { initializeDatabse } from "../src/database/InitializeDatabase";
@@ -42,6 +43,7 @@ const CombinedDefaultTheme = merge(LightTheme, CustomLightTheme);
 const CombinedDarkTheme = merge(DarkTheme, CustomDarkTheme);
 
 export default function Layout() {
+  const prefix = Linking.createURL("/");
   const colorScheme = useColorScheme();
   const paperTheme =
     colorScheme === "dark" ? CombinedDarkTheme : CombinedDefaultTheme;
@@ -50,7 +52,7 @@ export default function Layout() {
     <SQLiteProvider databaseName="appDatabase.db" onInit={initializeDatabse}>
       <PaperProvider theme={paperTheme}>
         <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen name="tabs" options={{ headerShown: false }} />
           <Stack.Screen
             name="orders/ShowQrCode"
             options={{

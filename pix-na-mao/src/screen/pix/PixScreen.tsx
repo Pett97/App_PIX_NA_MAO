@@ -46,7 +46,7 @@ export default function PixScreen() {
   );
 
   const redirect = useCallback(() => {
-    router.push("chaves_pix/NewChave");
+    router.push("/tabs/chaves_pix/NewChave");
   }, [router]);
 
   return (
@@ -69,7 +69,7 @@ export default function PixScreen() {
               cidade_recebedor={item.cidade_recebedor ?? "GUARAPUAVA"}
               chave_pix={item.chave_pix}
               action={() => {
-                router.push(`chaves_pix/${item.id}`);
+                router.push(`/tabs/chaves_pix/${item.id}`);
               }}
               secondAction={() => {
                 handleDelete("Cancelar", "Deletar", () => remove(item));

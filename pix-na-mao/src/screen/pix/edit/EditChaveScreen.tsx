@@ -46,7 +46,7 @@ function EditPixScreen() {
     try {
       await DB.update(data);
       Alert.alert("Chave atualizada com sucesso");
-      router.push("/chaves_pix/Index");
+      router.push("/tabs/chaves_pix/Index");
     } catch (error) {
       console.log(error);
     }
