@@ -17,17 +17,21 @@ com isso o usuário vai poder ter um controle melhor sobra as vendas realizadas 
 
 ✅ Funcionalidades básicas
  
- [] Criar um cliente 
+ [x] Criar um cliente 
 
- [] Cadastrar a chave PIX
+ [x] Cadastrar a chave PIX
 
- [] Gerar QRCODE com chave pix + valor venda
+ [x] Gerar QRCODE com chave pix + valor venda
 
  [] Controlar pix agendados
 
  [] Cadastrar Clientes na aba de devedores
 
  [] Exportar em CSV
+
+## [Link Wiki](https://github.com/Pett97/App_PIX_NA_MAO/wiki)
+## [Dowload Apk ](https://drive.google.com/file/d/1PCKywiyOwnK69E8q-14ieynSsVgHA82K/view?usp=sharing)
+
 
 ## 🧠 Protótipos
 Figma
@@ -72,9 +76,9 @@ Tabela: Chaves PIXs
    [x] Setup do repositório Expo
 
 #### [] Sprint 2
-   [] Cadastro de PR
+   [x] Cadastro de PR
 
-   [] Lista com filtros simples
+   [x] Lista com filtros simples
 
    [] Edição de status e observações
 
@@ -92,5 +96,5 @@ Tabela: Chaves PIXs
 
    [] Testes
 
-   [] Publicação do projeto
+   [x] Publicação do projeto
 
