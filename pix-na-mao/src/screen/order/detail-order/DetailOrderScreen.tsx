@@ -222,7 +222,7 @@ function DetailOrderScreen() {
           icon="bank"
           action={() => {
             router.push({
-              pathname: "/tabs/orders/ShowQrCode",
+              pathname: "/ShowQrCode",
               params: {
                 chavePix: "chave-pix-aqui",
                 nomeRecebedor: "Nome Recebedor",
