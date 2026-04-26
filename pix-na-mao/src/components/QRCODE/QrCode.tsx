@@ -11,10 +11,12 @@ interface QRCODEProps {
   infoAdicional: string;
 }
 
-// TODO na info adicional colocar o nome do pagadador
 function QrCode({ chavePix,nomeRecebedor,cidadeRecebedor,valor,infoAdicional}:QRCODEProps) {
-   const pix =  gerarPayloadPix({chavePix,nomeRecebedor,cidadeRecebedor,valor,infoAdicional});
+    nomeRecebedor = nomeRecebedor.trim();
+    cidadeRecebedor  = cidadeRecebedor.trim();
 
+   const pix =  gerarPayloadPix({chavePix,nomeRecebedor,cidadeRecebedor,valor});
+  console.log(pix);
   return <View>
    <QRCode value={pix} size={200}></QRCode>
   </View>;
