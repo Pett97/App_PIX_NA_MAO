@@ -11,6 +11,13 @@ function ShowQrCodeScreen() {
   return (
     <View style={styles.container}>
       <Text variant="titleLarge">QR Code do Pagamento</Text>
+      <View>
+        <Text>{chavePix}</Text>
+        <Text>{nomeRecebedor}</Text>
+        <Text>{cidadeRecebedor}</Text>
+        <Text>{valor}</Text>
+        <Text>{infoAdicional}</Text>
+      </View>
       <QrCode
         chavePix={String(chavePix)}
         nomeRecebedor={String(nomeRecebedor)}

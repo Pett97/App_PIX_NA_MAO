@@ -92,6 +92,8 @@ function DetailOrderScreen() {
     value: String(chavePix.id),
   }));
 
+  const chavePixSelecionada = chavesPix.find((chave)=>String(chave.id) === selectedChavePix);
+
   async function atualizarOrder() {
     const dataVenda: ComprasDatabase = {
       id: Number(id),
@@ -99,12 +101,13 @@ function DetailOrderScreen() {
       idChavePix: Number(selectedChavePix),
       idCliente: Number(selectedCliente),
       agendado: pixAgendado ? 1 : 0,
-      dataAgendamento: dataAgendamentoPix || null,
+      dataAgendamento: dataAgendamentoPix
+        ? new Date(dataAgendamentoPix)
+        : undefined,
       status: 1,
     };
 
     try {
-      console.log("Atualizando com dados:", dataVenda);
       await DB.update(dataVenda);
       Alert.alert("Venda atualizada com sucesso!");
     } catch (error) {
@@ -172,11 +175,11 @@ function DetailOrderScreen() {
           icon="bank"
           action={() => {
             router.push({
-              pathname: "orders/ShowQrCode",
+              pathname: "/ShowQrCode",
               params: {
-                chavePix: "chave-pix-aqui",
-                nomeRecebedor: "Nome Recebedor",
-                cidadeRecebedor: "Cidade Recebedor",
+                chavePix: chavePixSelecionada?.chave_pix,
+                nomeRecebedor: chavePixSelecionada?.nome_recebedor,
+                cidadeRecebedor: chavePixSelecionada?.cidade_recebedor,
                 valor: Number(valorVenda),
                 infoAdicional: "Pagamento de teste",
               },

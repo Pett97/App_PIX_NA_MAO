@@ -39,7 +39,6 @@ export default function PixScreen() {
   }
 
   function redirect() {
-    const router = useRouter();
     router.push("chaves_pix/NewChave");
   }
 

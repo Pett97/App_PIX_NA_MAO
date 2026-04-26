@@ -1,8 +1,6 @@
-
-//validar o PIX n teve alteração tirado da web 
 function calcularCRC16(payload: string): string {
    let polinomio = 0x1021;
-   let resultado = 0xFFFF;
+   let resultado = 0xffff;
 
    for (let i = 0; i < payload.length; i++) {
       resultado ^= payload.charCodeAt(i) << 8;
@@ -12,48 +10,49 @@ function calcularCRC16(payload: string): string {
          } else {
             resultado <<= 1;
          }
-         resultado &= 0xFFFF;
+         resultado &= 0xffff;
       }
    }
-   return resultado.toString(16).toUpperCase().padStart(4, '0');
+
+   return resultado.toString(16).toUpperCase().padStart(4, "0");
 }
 
-export default function gerarPayloadPix({
-   chavePix,
-   nomeRecebedor,
-   cidadeRecebedor,
-   valor,
-   infoAdicional = ''
-}: {
-   chavePix: string;
-   nomeRecebedor: string;
-   cidadeRecebedor: string;
-   valor: number;
-   infoAdicional?: string;
-}): string {
 
+function removerAcentos(texto: string): string {
+   return texto
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[^a-zA-Z0-9 ]/g, "");
+}
+
+export default function gerarPayloadPix({ chavePix, nomeRecebedor, cidadeRecebedor, valor, txid }: { chavePix: string; nomeRecebedor: string; cidadeRecebedor: string; valor?: number; txid?: string; }): string {
    function montaCampo(id: string, valor: string): string {
-      const tamanho = valor.length.toString().padStart(2, '0');
+      const tamanho = valor.length.toString().padStart(2, "0");
       return `${id}${tamanho}${valor}`;
    }
 
-   const payloadFormatIndicator = montaCampo('00', '01');
+   const payloadFormatIndicator = montaCampo("00", "01");
 
-   const merchantAccountInfo = montaCampo('26',
-      montaCampo('00', 'BR.GOV.BCB.PIX') +
-      montaCampo('01', chavePix) +
-      (infoAdicional ? montaCampo('02', infoAdicional) : '')
-   );
+   const merchantAccountInfo = montaCampo("26",montaCampo("00", "BR.GOV.BCB.PIX") +montaCampo("01", chavePix));
 
-   const merchantCategoryCode = montaCampo('52', '0000');
-   const transactionCurrency = montaCampo('53', '986'); // Real brasileiro
-   const transactionAmount = valor ? montaCampo('54', valor.toFixed(2)) : '';
-   const countryCode = montaCampo('58', 'BR');
-   const merchantName = montaCampo('59', nomeRecebedor.substring(0, 25));
-   const merchantCity = montaCampo('60', cidadeRecebedor.substring(0, 15));
-   const additionalDataField = montaCampo('62', montaCampo('05', '***'));
+   const merchantCategoryCode = montaCampo("52", "0000");
+   const transactionCurrency = montaCampo("53", "986");
 
-   // Monta payload sem CRC
+   //bug zero auhauha
+   const transactionAmount = valor !== undefined ? montaCampo("54", valor.toFixed(2)) : "";
+
+   const countryCode = montaCampo("58", "BR");
+
+   const merchantName = montaCampo("59", removerAcentos(nomeRecebedor).trim().substring(0, 25));
+
+   const merchantCity = montaCampo("60", removerAcentos(cidadeRecebedor).trim().substring(0, 15));
+
+
+   const txidFinal = txid || Date.now().toString();
+
+   const additionalDataField = montaCampo("62",montaCampo("05", txidFinal));
+
+
    const payloadSemCRC =
       payloadFormatIndicator +
       merchantAccountInfo +
@@ -64,7 +63,7 @@ export default function gerarPayloadPix({
       merchantName +
       merchantCity +
       additionalDataField +
-      '6304';
+      "6304";
 
    const crc16 = calcularCRC16(payloadSemCRC);
 

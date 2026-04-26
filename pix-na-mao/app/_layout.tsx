@@ -53,7 +53,7 @@ export default function _layout() {
         <Stack>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
           <Stack.Screen
-            name="orders/ShowQrCode"
+            name="ShowQrCode"
             options={{
               title: "Visualizar QRCODE",
               headerTitleAlign: "center",

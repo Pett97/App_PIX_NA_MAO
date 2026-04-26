@@ -24,7 +24,6 @@ function OrderScreen() {
 
   async function list() {
     const response = await DB.getVendasFormatadas();
-    console.log(response);
     setCompras(response);
   }
 
